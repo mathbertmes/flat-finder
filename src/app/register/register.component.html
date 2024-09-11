@@ -1,0 +1,39 @@
+<div class="box">
+    <form>
+        <div>
+            <label for="fullname">Full Name</label>
+            <input type="text" placeholder="Full Name" name="fullname" id="fullname" formControlName="fullname"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" placeholder="email" name="email" id="email" formControlName="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" placeholder="Password" name="password" id="password" formControlName="password"
+                required>
+        </div>
+
+        <div>
+            <label for="password">Confirm Password </label>
+            <input type="password" name="passwordConfirm" id="passwordConfirm" required />
+        </div>
+
+
+        <div>
+            <button type="submit">
+                Register
+            </button>
+        </div>
+
+
+
+        <!-- 登録成功メッセージの表示 -->
+        <div>
+            <h3>Let's start. You are registered.</h3>
+        </div>
+    </form>
+</div>
