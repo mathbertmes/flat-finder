@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -9,6 +9,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +21,10 @@ import { NgIf } from '@angular/common';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  http = inject(HttpClient)
+  router = inject(Router)
+  authService = inject(AuthService);
+  
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
@@ -34,5 +41,13 @@ export class LoginComponent {
     return this.form.get('password');
   }
 
-  onSubmit(): void {}
+  onSubmit(): void{
+    const rawForm = this.form.getRawValue()
+    if(rawForm.email && rawForm.password){
+      this.authService.login(rawForm.email, rawForm.password)
+      .subscribe(() => {
+        this.router.navigateByUrl("/")
+      })
+    }
+  }
 }

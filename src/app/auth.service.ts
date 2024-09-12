@@ -45,6 +45,7 @@ export class AuthService {
     ).then((response) => {
       localStorage.setItem("userFullName", response.user.displayName!)
       localStorage.setItem('userId', response.user.uid)
+      console.log(response.user)
     })
     return from(promise);
   }
