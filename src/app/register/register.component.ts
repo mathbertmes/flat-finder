@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -9,6 +9,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-register',
@@ -18,6 +21,10 @@ import { NgIf } from '@angular/common';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
+  http = inject(HttpClient)
+  router = inject(Router)
+  authService = inject(AuthService);
+  
   form = new FormGroup(
     {
       firstName: new FormControl('', [
@@ -30,8 +37,7 @@ export class RegisterComponent {
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
       birthDate: new FormControl('', [
-        Validators.required,
-        this.ageValidator(18),
+        Validators.required
       ]),
       password: new FormControl('', [
         Validators.required,
@@ -100,5 +106,13 @@ export class RegisterComponent {
     };
   }
 
-  onSubmit(): void {}
+  onSubmit(): void {
+    const rawForm = this.form.getRawValue()
+    if(rawForm.email && rawForm.password && rawForm.firstName, rawForm.lastName){
+      this.authService.register(rawForm.email!, rawForm.password!, rawForm.firstName!, rawForm.lastName!)
+      .subscribe(() => {
+        this.router.navigateByUrl("/")
+      })
+    }
+  }
 }
