@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'flatFinder' title`, () => {
+  it(`should have the 'flat-finder' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('flatFinder');
+    expect(app.title).toEqual('flat-finder');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, flatFinder');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, flat-finder');
   });
 });

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "flatFinder": {
+    "flat-finder": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "flatFinder:build:production"
+              "buildTarget": "flat-finder:build:production"
             },
             "development": {
-              "buildTarget": "flatFinder:build:development"
+              "buildTarget": "flat-finder:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -92,5 +92,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
