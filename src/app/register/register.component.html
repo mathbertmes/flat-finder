@@ -9,22 +9,6 @@
                     <div *ngIf="firstName?.hasError('minlength')">First must be at least 2 characters long.</div>
                 </div>
             </div>
-
-            <form class="example-form">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Email</mat-label>
-                    <input type="email" matInput [formControl]="emailFormControl" [errorStateMatcher]="matcher"
-                        placeholder="Ex. pat@example.com">
-                    <mat-hint>Errors appear instantly!</mat-hint>
-                    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {
-                    <mat-error>Please enter a valid email address</mat-error>
-                    }
-                    @if (emailFormControl.hasError('required')) {
-                    <mat-error>Email is <strong>required</strong></mat-error>
-                    }
-                </mat-form-field>
-            </form>
-
             <div class="fieldContainer">
                 <label for="lastName">Last Name</label>
                 <input matInput id="lastName" placeholder="Last Name" formControlName="lastName" />
@@ -43,10 +27,10 @@
             </div>
             <div class="fieldContainer">
                 <label for="birthDate">BirthDate</label>
-                <input matInput id="birthDate" placeholder="Birth Date" type="date" formControlName="birthDate" />
+                <input matInput id="birthDate" placeholder="Birth Date" type="date" formControlName="birthDate"
+                    min="1904-12-31" max="2006-01-01" />
                 <div *ngIf="birthDate?.invalid && birthDate?.touched" class="alert alert-danger">
                     <div *ngIf="birthDate?.hasError('required')">Birth Date is required.</div>
-                    <div *ngIf="birthDate?.hasError('minAge')">You must be at least 18 years old.</div>
                 </div>
             </div>
             <div class="fieldContainer">
