@@ -59,6 +59,9 @@ export class RegisterComponent {
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
+        Validators.pattern(
+          '^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{6,})$'
+        ),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
@@ -202,11 +205,16 @@ export class RegisterComponent {
   }
 
   updatePasswordErrorMessage() {
+    console.log(this.password?.errors);
     if (this.password!.hasError('required')) {
       this.passwordErrorMessage.set('You must enter a value');
     } else if (this.password!.hasError('minlength')) {
       this.passwordErrorMessage.set(
         'Password must be at least 6 characters long.'
+      );
+    } else if (this.password?.hasError('pattern')) {
+      this.passwordErrorMessage.set(
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
       );
     } else {
       this.passwordErrorMessage.set('');
