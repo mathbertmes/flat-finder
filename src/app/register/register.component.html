@@ -1,39 +1,87 @@
 <div class="contentContainer">
     <div class="formWrapper">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="fieldContainer">
+            <!-- <div class="fieldContainer">
                 <label for="firstName">First Name</label>
                 <input matInput id="firstName" placeholder="First Name" formControlName="firstName" />
                 <div *ngIf="firstName?.invalid && firstName?.touched" class="alert alert-danger">
                     <div *ngIf="firstName?.hasError('required')">First Name is required.</div>
                     <div *ngIf="firstName?.hasError('minlength')">First must be at least 2 characters long.</div>
                 </div>
+            </div> -->
+
+            <div class="example-container">
+                <mat-form-field>
+                    <mat-label>Enter your first name</mat-label>
+                    <input matInput placeholder="First Name" formControlName="firstName"
+                        (blur)="updateFirstNameErrorMessage()" required />
+                    @if (firstName?.invalid) {
+                    <mat-error>{{firstNameErrorMessage()}}</mat-error>
+                    }
+                </mat-form-field>
             </div>
-            <div class="fieldContainer">
+
+            <!-- <div class="fieldContainer">
                 <label for="lastName">Last Name</label>
                 <input matInput id="lastName" placeholder="Last Name" formControlName="lastName" />
                 <div *ngIf="lastName?.invalid && lastName?.touched" class="alert alert-danger">
                     <div *ngIf="lastName?.hasError('required')">Last Name is required.</div>
                     <div *ngIf="firstName?.hasError('minlength')">Last must be at least 2 characters long.</div>
                 </div>
+            </div> -->
+
+            <div class="example-container">
+                <mat-form-field>
+                    <mat-label>Enter your last name</mat-label>
+                    <input matInput placeholder="Last Name" formControlName="lastName"
+                        (blur)="updateLastNameErrorMessage()" required />
+                    @if (lastName?.invalid) {
+                    <mat-error>{{lastNameErrorMessage()}}</mat-error>
+                    }
+                </mat-form-field>
             </div>
-            <div class="fieldContainer">
+
+            <!-- <div class="fieldContainer">
                 <label for="email">Email</label>
                 <input matInput id="email" placeholder="Email" type="email" formControlName="email" />
                 <div *ngIf="email?.invalid && email?.touched" class="alert alert-danger">
                     <div *ngIf="email?.hasError('required')">Email is required.</div>
                     <div *ngIf="email?.hasError('email')">Email must be email type</div>
                 </div>
+            </div> -->
+
+            <div class="example-container">
+                <mat-form-field>
+                    <mat-label>Enter your email</mat-label>
+                    <input matInput placeholder="pat@example.com" formControlName="email"
+                        (blur)="updateEmailErrorMessage()" required />
+                    @if (email?.invalid) {
+                    <mat-error>{{emailErrorMessage()}}</mat-error>
+                    }
+                </mat-form-field>
             </div>
-            <div class="fieldContainer">
+
+            <!-- <div class="fieldContainer">
                 <label for="birthDate">BirthDate</label>
                 <input matInput id="birthDate" placeholder="Birth Date" type="date" formControlName="birthDate"
                     min="1904-12-31" max="2006-01-01" />
                 <div *ngIf="birthDate?.invalid && birthDate?.touched" class="alert alert-danger">
                     <div *ngIf="birthDate?.hasError('required')">Birth Date is required.</div>
                 </div>
+            </div> -->
+
+            <div class="example-container">
+                <mat-form-field>
+                    <mat-label>Enter your birth date</mat-label>
+                    <input type="date" matInput placeholder="" formControlName="birthDate" min="1904-12-31"
+                        max="2006-01-01" (blur)="updateBirthDateErrorMessage()" required />
+                    @if (birthDate?.invalid) {
+                    <mat-error>{{birthDateErrorMessage()}}</mat-error>
+                    }
+                </mat-form-field>
             </div>
-            <div class="fieldContainer">
+
+            <!-- <div class="fieldContainer">
                 <label for="password">Password</label>
                 <input id="password" matInput type="password" placeholder="Password" formControlName="password" />
                 <div *ngIf="password?.invalid && password?.touched" class="alert alert-danger">
@@ -42,8 +90,25 @@
                         Password must be at least 6 characters long.
                     </div>
                 </div>
+            </div> -->
+
+            <div class="example-container">
+                <mat-form-field>
+                    <mat-label>Enter your password</mat-label>
+                    <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password"
+                        (blur)="updatePasswordErrorMessage()" required />
+                    @if (password?.invalid) {
+                    <mat-error>{{passwordErrorMessage()}}</mat-error>
+                    }
+                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide()">
+                        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
             </div>
-            <div class="fieldContainer">
+
+
+            <!-- <div class="fieldContainer">
                 <label for="confirmPassword">Confirm Password</label>
                 <input id="confirmPassword" matInput type="password" placeholder="Confirm password"
                     formControlName="confirmPassword" />
@@ -55,9 +120,27 @@
                         Password and confirm password must be the same.
                     </div>
                 </div>
+            </div> -->
+
+            <div class="example-container">
+                <mat-form-field>
+                    <mat-label>Confirm your password</mat-label>
+                    <input matInput [type]="hide() ? 'password' : 'text'" formControlName="confirmPassword"
+                        (blur)="updateConfirmPasswordErrorMessage()" required />
+                    @if (confirmPassword?.invalid) {
+                    <mat-error>{{confirmPasswordErrorMessage()}}</mat-error>
+                    }
+                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide()">
+                        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
             </div>
 
-            <button class="success" [disabled]="!form.valid" type="submit">Register</button>
+            <button class="success" [disabled]="!form.valid" type="submit" mat-flat-button>Login</button>
+
+
+            <!-- <button class="success" [disabled]="!form.valid" type="submit">Register</button> -->
         </form>
     </div>
 </div>
