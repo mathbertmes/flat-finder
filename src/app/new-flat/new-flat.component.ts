@@ -21,6 +21,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { merge } from 'rxjs';
+import { FirestoreService } from '../firestore.service';
 
 interface AC {
   value: string;
@@ -48,29 +49,27 @@ export class NewFlatComponent {
   http = inject(HttpClient);
   router = inject(Router);
   authService = inject(AuthService);
+  firestoreService = inject(FirestoreService)
+
   form = new FormGroup({
     city: new FormControl('', [Validators.required]),
-    streetNumber: new FormControl('', [Validators.required]),
-    areaSize: new FormControl('', [
+    streetNumber: new FormControl(0, [Validators.required]),
+    areaSize: new FormControl(0, [
       Validators.required,
       Validators.pattern('^[0-9]*$'),
     ]),
-    hasAc: new FormControl('', [Validators.required]),
-    yearBuild: new FormControl('', [
+    hasAc: new FormControl("", [Validators.required]),
+    yearBuild: new FormControl(0, [
       Validators.required,
       Validators.pattern('^[0-9]*$'),
     ]),
-    rentPrice: new FormControl('', [
+    rentPrice: new FormControl(0, [
       Validators.required,
       Validators.pattern('^[0-9]*$'),
     ]),
-    dataAvailable: new FormControl('', [Validators.required]),
+    dataAvailable: new FormControl<Date | undefined>(undefined, [Validators.required]),
   });
 
-  ACs: AC[] = [
-    { value: 'yes-0', viewValue: 'Yes' },
-    { value: 'no-1', viewValue: 'No' },
-  ];
 
   get city() {
     return this.form.get('city');
@@ -100,6 +99,7 @@ export class NewFlatComponent {
 
   onSubmit(): void {
     const rawForm = this.form.getRawValue();
+    const userId = localStorage.getItem("userId")
     if (
       rawForm.city &&
       rawForm.streetNumber &&
@@ -107,9 +107,21 @@ export class NewFlatComponent {
       rawForm.hasAc &&
       rawForm.yearBuild &&
       rawForm.rentPrice &&
-      rawForm.dataAvailable
+      rawForm.dataAvailable &&
+      userId
     ) {
-      this.authService;
+      const newFlat = {
+        userId: userId,
+        city: rawForm.city, 
+        streetNumber: rawForm.streetNumber,
+        areaSize: rawForm.areaSize,
+        hasAc: rawForm.hasAc === "true" ? true : false, 
+        yearBuild: rawForm.yearBuild,
+        rentPrice: rawForm.rentPrice,
+        dataAvailable: rawForm.dataAvailable
+      }
+      
+      this.firestoreService.createFlat(newFlat);
     }
   }
 

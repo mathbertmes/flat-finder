@@ -16,7 +16,7 @@
             <div class="example-container">
                 <mat-form-field>
                     <mat-label>Enter Street Number</mat-label>
-                    <input matInput placeholder="Street Number" formControlName="streetNumber"
+                    <input type="number" matInput placeholder="Street Number" formControlName="streetNumber"
                         (blur)="updateStreetNumberErrorMessage()" required />
                     @if (streetNumber?.invalid) {
                     <mat-error>{{streetNumberErrorMessage()}}</mat-error>
@@ -27,7 +27,7 @@
             <div class="example-container">
                 <mat-form-field>
                     <mat-label>Enter Area Size</mat-label>
-                    <input matInput placeholder="Area Size" formControlName="areaSize"
+                    <input matInput type="number" placeholder="Area Size" formControlName="areaSize"
                         (blur)="updateAreaSizeErrorMessage()" required />
                     @if (areaSize?.invalid) {
                     <mat-error>{{areaSizeErrorMessage()}}</mat-error>
@@ -39,9 +39,8 @@
                 <mat-form-field>
                     <mat-label>Enter Has Ac</mat-label>
                     <mat-select formControlName="hasAc" (blur)="updateHasAcErrorMessage()" required>
-                        @for (AC of ACs; track AC) {
-                        <mat-option [value]="AC.value">{{AC.viewValue}}</mat-option>
-                        }
+                        <mat-option value="false">No</mat-option>
+                        <mat-option value="true">Yes</mat-option>
                     </mat-select>
                     @if (hasAc?.invalid) {
                     <mat-error>{{hasAcErrorMessage()}}</mat-error>
@@ -52,7 +51,7 @@
             <div class="example-container">
                 <mat-form-field>
                     <mat-label>Enter Year Build</mat-label>
-                    <input matInput placeholder="Year Build" formControlName="yearBuild"
+                    <input type="number" matInput placeholder="Year Build" formControlName="yearBuild"
                         (blur)="updateYearBuildErrorMessage()" required />
                     @if (yearBuild?.invalid) {
                     <mat-error>{{yearBuildErrorMessage()}}</mat-error>
@@ -63,7 +62,7 @@
             <div class="example-container">
                 <mat-form-field>
                     <mat-label>Enter Rent Price</mat-label>
-                    <input matInput placeholder="Rent Price" formControlName="rentPrice"
+                    <input matInput type="number" placeholder="Rent Price" formControlName="rentPrice"
                         (blur)="updateRentPriceErrorMessage()" required />
                     @if (rentPrice?.invalid) {
                     <mat-error>{{rentPriceErrorMessage()}}</mat-error>
