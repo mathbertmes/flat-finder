@@ -1,5 +1,5 @@
 export interface Flat{
-  id: string;
+  userId: string;
   city: string;
   streetNumber: number;
   areaSize: number;
