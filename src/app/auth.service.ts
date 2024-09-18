@@ -31,6 +31,7 @@ export class AuthService {
     ).then((response) => {
       updateProfile(response.user, { displayName: `${firstName} ${lastName}` });
       localStorage.setItem("userFullName", `${firstName} ${lastName}`);
+      localStorage.setItem("userEmail", email)
       localStorage.setItem('userId', response.user.uid);
       
     });
@@ -44,6 +45,7 @@ export class AuthService {
       password
     ).then((response) => {
       localStorage.setItem("userFullName", response.user.displayName!)
+      localStorage.setItem("userEmail", response.user.email!)
       localStorage.setItem('userId', response.user.uid)
       console.log(response.user)
     })
