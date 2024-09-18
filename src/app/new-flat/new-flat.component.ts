@@ -100,6 +100,8 @@ export class NewFlatComponent {
   onSubmit(): void {
     const rawForm = this.form.getRawValue();
     const userId = localStorage.getItem("userId")
+    const userFullName = localStorage.getItem("userFullName")
+    const userEmail = localStorage.getItem("userEmail")
     if (
       rawForm.city &&
       rawForm.streetNumber &&
@@ -108,10 +110,13 @@ export class NewFlatComponent {
       rawForm.yearBuild &&
       rawForm.rentPrice &&
       rawForm.dataAvailable &&
-      userId
+      userId && userFullName &&
+      userEmail
     ) {
       const newFlat = {
-        userId: userId,
+        userId,
+        userFullName,
+        userEmail,
         city: rawForm.city, 
         streetNumber: rawForm.streetNumber,
         areaSize: rawForm.areaSize,
