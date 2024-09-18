@@ -47,6 +47,7 @@ export class LoginComponent {
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
+      Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/),
     ]),
   });
 
@@ -92,6 +93,10 @@ export class LoginComponent {
     } else if (this.password!.hasError('minlength')) {
       this.passwordErrorMessage.set(
         'Password must be at least 6 characters long.'
+      );
+    } else if (this.password?.hasError('pattern')) {
+      this.passwordErrorMessage.set(
+        'Password must contain at least one special character'
       );
     } else {
       this.passwordErrorMessage.set('');

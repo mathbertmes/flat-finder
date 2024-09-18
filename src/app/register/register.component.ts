@@ -59,14 +59,14 @@ export class RegisterComponent {
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
-        Validators.pattern(
-          '^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{6,})$'
-        ),
+        Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
     [this.matching('password', 'confirmPassword')]
   );
+
+  checkSpecialCharacter = () => {};
 
   get firstName() {
     return this.form.get('firstName');
@@ -214,7 +214,7 @@ export class RegisterComponent {
       );
     } else if (this.password?.hasError('pattern')) {
       this.passwordErrorMessage.set(
-        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+        'Password must contain at least one special character'
       );
     } else {
       this.passwordErrorMessage.set('');
