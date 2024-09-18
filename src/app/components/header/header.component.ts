@@ -26,7 +26,8 @@ export class HeaderComponent {
   logout(): void {
     this.authService.logout();
     localStorage.removeItem('userId');
-    localStorage.removeItem('username');
+    localStorage.removeItem('userFullName');
+    localStorage.removeItem('userEmail');
     this.router.navigateByUrl('/login');
   }
 }

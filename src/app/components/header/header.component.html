@@ -17,12 +17,14 @@
     </div>
     <div class="flex">
 
-        <a class="" routerLink="/register">Register</a>
+        <div *ngIf="!localStorage.getItem('userFullName')">
+            <a class="" routerLink="/register">Register</a>
 
-        <a class="" routerLink="/login">Login</a>
+            <a class="" routerLink="/login">Login</a>
+        </div>
 
-        <div *ngIf="localStorage.getItem('username')">
-            <h2>{{localStorage.getItem('username')}}</h2>
+        <div *ngIf="localStorage.getItem('userFullName')">
+            <h2>{{localStorage.getItem('userFullName')}}</h2>
             <button (click)="logout()">Logout</button>
 
         </div>
