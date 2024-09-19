@@ -1,4 +1,12 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Output,
+  HostListener,
+} from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../auth.service';
 import { NgIf } from '@angular/common';
@@ -6,17 +14,30 @@ import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, NgIf],
+  imports: [RouterLink, NgIf, MatMenuModule, MatButtonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  isMobile: boolean = false;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkWindowSize();
+  }
+
+  checkWindowSize() {
+    this.isMobile = window.innerWidth <= 768;
+  }
+
   @Output() public sideNavToggle = new EventEmitter();
   authService = inject(AuthService);
   router = inject(Router);
   localStorage = localStorage;
 
-  constructor() {}
+  constructor() {
+    this.checkWindowSize();
+  }
   ngOnInit(): void {}
   onToggleSidenav() {
     // Open and close side nav bar

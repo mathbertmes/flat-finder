@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
@@ -20,6 +25,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { merge } from 'rxjs';
 import { FirestoreService } from '../firestore.service';
 
@@ -37,11 +44,14 @@ interface AC {
     MatIconModule,
     MatDividerModule,
     MatButtonModule,
+    MatDatepickerModule,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
     NgIf,
   ],
+  providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './new-flat.component.html',
   styleUrl: './new-flat.component.css',
 })
@@ -49,7 +59,7 @@ export class NewFlatComponent {
   http = inject(HttpClient);
   router = inject(Router);
   authService = inject(AuthService);
-  firestoreService = inject(FirestoreService)
+  firestoreService = inject(FirestoreService);
 
   form = new FormGroup({
     city: new FormControl('', [Validators.required]),
@@ -58,7 +68,7 @@ export class NewFlatComponent {
       Validators.required,
       Validators.pattern('^[0-9]*$'),
     ]),
-    hasAc: new FormControl("", [Validators.required]),
+    hasAc: new FormControl('', [Validators.required]),
     yearBuild: new FormControl(0, [
       Validators.required,
       Validators.pattern('^[0-9]*$'),
@@ -67,9 +77,10 @@ export class NewFlatComponent {
       Validators.required,
       Validators.pattern('^[0-9]*$'),
     ]),
-    dataAvailable: new FormControl<Date | undefined>(undefined, [Validators.required]),
+    dataAvailable: new FormControl<Date | undefined>(undefined, [
+      Validators.required,
+    ]),
   });
-
 
   get city() {
     return this.form.get('city');
@@ -99,9 +110,9 @@ export class NewFlatComponent {
 
   onSubmit(): void {
     const rawForm = this.form.getRawValue();
-    const userId = localStorage.getItem("userId")
-    const userFullName = localStorage.getItem("userFullName")
-    const userEmail = localStorage.getItem("userEmail")
+    const userId = localStorage.getItem('userId');
+    const userFullName = localStorage.getItem('userFullName');
+    const userEmail = localStorage.getItem('userEmail');
     if (
       rawForm.city &&
       rawForm.streetNumber &&
@@ -110,22 +121,23 @@ export class NewFlatComponent {
       rawForm.yearBuild &&
       rawForm.rentPrice &&
       rawForm.dataAvailable &&
-      userId && userFullName &&
+      userId &&
+      userFullName &&
       userEmail
     ) {
       const newFlat = {
         userId,
         userFullName,
         userEmail,
-        city: rawForm.city, 
+        city: rawForm.city,
         streetNumber: rawForm.streetNumber,
         areaSize: rawForm.areaSize,
-        hasAc: rawForm.hasAc === "true" ? true : false, 
+        hasAc: rawForm.hasAc === 'true' ? true : false,
         yearBuild: rawForm.yearBuild,
         rentPrice: rawForm.rentPrice,
-        dataAvailable: rawForm.dataAvailable
-      }
-      
+        dataAvailable: rawForm.dataAvailable,
+      };
+
       this.firestoreService.createFlat(newFlat);
     }
   }

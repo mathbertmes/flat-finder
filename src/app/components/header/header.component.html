@@ -1,36 +1,41 @@
-<!-- <div class="h-[100px] flex justify-between items-center max-w-7xl mx-auto px-5"> -->
 <div class="nav">
     <div class="flex">
         <div>
-            <button class="h-4 w-4" mat-icon-button (click)="onToggleSidenav()">
+            <!-- <button class="h-4 w-4" mat-icon-button (click)="onToggleSidenav()">
                 menu
-            </button>
+            </button> -->
+            <div *ngIf="isMobile">
+                <button mat-button [matMenuTriggerFor]="menu" class="custom-button">Menu</button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item>Home</button>
+                    <button mat-menu-item>My Profile</button>
+                    <button mat-menu-item>My Flats</button>
+                    <button mat-menu-item>Favorites</button>
+                    <button mat-menu-item>All Users</button>
+                    <button mat-menu-item>Delete Account</button>
+                </mat-menu>
+            </div>
         </div>
 
-        <div class="flex">
+        <div class="flex menuItems">
             <a class="" routerLink="/home">Home</a>
-            <a class="" routerLink="/tasks">Tasks</a>
-
-            <a class="" routerLink="/about">About</a>
-
+            <a class="" routerLink="/about">My Profile</a>
+            <a class="" routerLink="/new-flat">My Flats</a>
+            <a class="" routerLink="/">Favorites</a>
+            <a class="" routerLink="/">All Users</a>
+            <a class="" routerLink="/">Delete Account</a>
         </div>
     </div>
-    <div class="flex">
-
-        <div *ngIf="!localStorage.getItem('userFullName')">
+    <div class="flex logInOut">
+        <div class="flex" *ngIf="!localStorage.getItem('userFullName')">
             <a class="" routerLink="/register">Register</a>
-
             <a class="" routerLink="/login">Login</a>
         </div>
 
-        <div *ngIf="localStorage.getItem('userFullName')">
-            <h2>{{localStorage.getItem('userFullName')}}</h2>
-            <button (click)="logout()">Logout</button>
-
+        <div class="flex" *ngIf="localStorage.getItem('userFullName')">
+            <h2 class="userFullName">Hello - {{localStorage.getItem('userFullName')}}</h2>
+            <!-- <button (click)="logout()">Logout</button> -->
+            <a (click)="logout()">Logout</a>
         </div>
-
     </div>
-
-
-
 </div>

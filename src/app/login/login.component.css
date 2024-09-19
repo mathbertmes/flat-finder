@@ -14,3 +14,10 @@ input.example-right-align::-webkit-inner-spin-button {
 input.example-right-align {
   -moz-appearance: textfield;
 }
+
+.container {
+  display: flex;
+  justify-content: center; /* 水平方向の中央寄せ */
+  align-items: center; /* 垂直方向の中央寄せ */
+  height: calc(100vh - 80px); /* コンテナの高さを画面全体に設定 */
+}
