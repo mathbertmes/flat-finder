@@ -1,4 +1,4 @@
-<div class="contentContainer">
+<div class="container">
     <div class="formWrapper">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
@@ -72,12 +72,14 @@
 
             <div class="example-container">
                 <mat-form-field>
-                    <mat-label>Enter Data Available</mat-label>
-                    <input type="date" matInput placeholder="" formControlName="dataAvailable" min="1904-12-31"
-                        max="2006-01-01" (blur)="updateDataAvailableErrorMessage()" required />
+                    <mat-label>Choose Data Available</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="dataAvailable"
+                        (blur)="updateDataAvailableErrorMessage()" required>
                     @if (dataAvailable?.invalid) {
                     <mat-error>{{dataAvailableErrorMessage()}}</mat-error>
                     }
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
             </div>
 

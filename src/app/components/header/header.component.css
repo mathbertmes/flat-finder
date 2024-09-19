@@ -4,15 +4,13 @@
   display: flex;
   justify-content: space-between;
   background: turquoise;
-  margin-bottom: 10px;
 }
 
 .flex {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
   align-items: center;
-  padding: 0 20px;
 }
 
 a {
@@ -22,4 +20,29 @@ a {
 
 a:hover {
   color: rgb(240, 240, 245);
+}
+
+.userFullName {
+  font-size: medium;
+  font-weight: lighter;
+}
+
+.logInOut {
+  margin-right: 10px;
+}
+
+.custom-button {
+  margin-left: 10px;
+  background-color: white;
+  color: primary;
+}
+
+.custom-button:hover {
+  background-color: rgb(229, 229, 229);
+}
+
+@media (max-width: 768px) {
+  .menuItems {
+    display: none;
+  }
 }

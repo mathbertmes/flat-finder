@@ -1,14 +1,6 @@
-<div class="contentContainer">
+<div class="container">
     <div class="formWrapper">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <!-- <div class="fieldContainer">
-                <label for="firstName">First Name</label>
-                <input matInput id="firstName" placeholder="First Name" formControlName="firstName" />
-                <div *ngIf="firstName?.invalid && firstName?.touched" class="alert alert-danger">
-                    <div *ngIf="firstName?.hasError('required')">First Name is required.</div>
-                    <div *ngIf="firstName?.hasError('minlength')">First must be at least 2 characters long.</div>
-                </div>
-            </div> -->
 
             <div class="example-container">
                 <mat-form-field>
@@ -21,15 +13,6 @@
                 </mat-form-field>
             </div>
 
-            <!-- <div class="fieldContainer">
-                <label for="lastName">Last Name</label>
-                <input matInput id="lastName" placeholder="Last Name" formControlName="lastName" />
-                <div *ngIf="lastName?.invalid && lastName?.touched" class="alert alert-danger">
-                    <div *ngIf="lastName?.hasError('required')">Last Name is required.</div>
-                    <div *ngIf="firstName?.hasError('minlength')">Last must be at least 2 characters long.</div>
-                </div>
-            </div> -->
-
             <div class="example-container">
                 <mat-form-field>
                     <mat-label>Enter your last name</mat-label>
@@ -40,15 +23,6 @@
                     }
                 </mat-form-field>
             </div>
-
-            <!-- <div class="fieldContainer">
-                <label for="email">Email</label>
-                <input matInput id="email" placeholder="Email" type="email" formControlName="email" />
-                <div *ngIf="email?.invalid && email?.touched" class="alert alert-danger">
-                    <div *ngIf="email?.hasError('required')">Email is required.</div>
-                    <div *ngIf="email?.hasError('email')">Email must be email type</div>
-                </div>
-            </div> -->
 
             <div class="example-container">
                 <mat-form-field>
@@ -61,15 +35,6 @@
                 </mat-form-field>
             </div>
 
-            <!-- <div class="fieldContainer">
-                <label for="birthDate">BirthDate</label>
-                <input matInput id="birthDate" placeholder="Birth Date" type="date" formControlName="birthDate"
-                    min="1904-12-31" max="2006-01-01" />
-                <div *ngIf="birthDate?.invalid && birthDate?.touched" class="alert alert-danger">
-                    <div *ngIf="birthDate?.hasError('required')">Birth Date is required.</div>
-                </div>
-            </div> -->
-
             <!-- <div class="example-container">
                 <mat-form-field>
                     <mat-label>Enter your birth date</mat-label>
@@ -81,25 +46,16 @@
                 </mat-form-field>
             </div> -->
 
-            <mat-form-field>
-                <mat-label>Choose your birth date</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="birthDate" min="1904-11-31" max="2006-02-01"
-                    (blur)="updateBirthDateErrorMessage()" required>
-                <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-
-            <!-- <div class="fieldContainer">
-                <label for="password">Password</label>
-                <input id="password" matInput type="password" placeholder="Password" formControlName="password" />
-                <div *ngIf="password?.invalid && password?.touched" class="alert alert-danger">
-                    <div *ngIf="password?.hasError('required')">Password is required.</div>
-                    <div *ngIf="password?.hasError('minlength')">
-                        Password must be at least 6 characters long.
-                    </div>
-                </div>
-            </div> -->
+            <div class="example-container">
+                <mat-form-field>
+                    <mat-label>Choose your birth date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="birthDate" min="1904-11-31"
+                        max="2006-02-01" (blur)="updateBirthDateErrorMessage()" required>
+                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
 
             <div class="example-container">
                 <mat-form-field>
@@ -115,21 +71,6 @@
                     </button>
                 </mat-form-field>
             </div>
-
-
-            <!-- <div class="fieldContainer">
-                <label for="confirmPassword">Confirm Password</label>
-                <input id="confirmPassword" matInput type="password" placeholder="Confirm password"
-                    formControlName="confirmPassword" />
-                <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="alert alert-danger">
-                    <div *ngIf="confirmPassword?.hasError('required')">
-                        Confirm password is required.
-                    </div>
-                    <div *ngIf="confirmPassword?.hasError('matching')">
-                        Password and confirm password must be the same.
-                    </div>
-                </div>
-            </div> -->
 
             <div class="example-container">
                 <mat-form-field>
