@@ -1,0 +1,36 @@
+<table mat-table [dataSource]="flats$ ">
+
+    <!-- First Name Column -->
+    <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef> First Name </th>
+        <!-- <td mat-cell *matCellDef="let element"> {{element.firstName}} </td> -->
+        <!-- <td mat-cell *matCellDef="let element"> {{localStorage.getItem('userFullName')}} </td> -->
+        <td mat-cell *matCellDef="let element"> {{ firstName }} </td>
+    </ng-container>
+
+    <!-- Last Name Column -->
+    <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef> Last Name </th>
+        <!-- <td mat-cell *matCellDef="let element"> {{element.userFullName}} </td> -->
+        <td mat-cell *matCellDef="let element"> {{ lastName }} </td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="userEmail">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <!-- <td mat-cell *matCellDef="let element"> {{element.userEmail}} </td> -->
+        <td mat-cell *matCellDef="let element"> {{localStorage.getItem('userEmail')}} </td>
+    </ng-container>
+
+    <!-- Birth Date Column -->
+    <ng-container matColumnDef="birthDate">
+        <th mat-header-cell *matHeaderCellDef> Birth Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.birthDate}} </td>
+    </ng-container>
+
+
+    <!-- Header and Row Declarations -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
