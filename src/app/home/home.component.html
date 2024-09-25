@@ -1,8 +1,33 @@
-<table mat-table [dataSource]="flats$ " >
+<div>
+  <form [formGroup]="formFilter" (ngSubmit)="onFilter()" class="flex gap-2">
+    <mat-form-field class="example-full-width">
+      <mat-label>City</mat-label>
+      <input matInput placeholder="City" formControlName="city">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Min price</mat-label>
+      <input type="number" matInput placeholder="" formControlName="minPrice">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Max price</mat-label>
+      <input type="number" matInput placeholder="" formControlName="maxPrice">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Min area</mat-label>
+      <input type="number" matInput placeholder="" formControlName="minArea">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Max area</mat-label>
+      <input type="number" matInput placeholder="" formControlName="maxArea">
+    </mat-form-field>
+    <button class="success" type="submit" mat-flat-button>Filter</button>
+  </form>
+</div>
+<table matSort  mat-table [dataSource]="flats$ " >
 
   <!-- City Column -->
   <ng-container matColumnDef="city">
-    <th mat-header-cell *matHeaderCellDef> City </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
     <td mat-cell *matCellDef="let element"> {{element.city}} </td>
   </ng-container>
 
@@ -26,7 +51,7 @@
 
   <!-- Area Size Column -->
   <ng-container matColumnDef="areaSize">
-    <th mat-header-cell *matHeaderCellDef> Area Size </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Area Size </th>
     <td mat-cell *matCellDef="let element"> {{element.areaSize}} </td>
   </ng-container>
 
@@ -44,7 +69,7 @@
 
   <!-- Rent Price Column -->
   <ng-container matColumnDef="rentPrice">
-    <th mat-header-cell *matHeaderCellDef> Rent Price </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Rent Price </th>
     <td mat-cell *matCellDef="let element"> {{element.rentPrice}} </td>
   </ng-container>
 
