@@ -3,6 +3,7 @@ import {
   inject,
   signal,
   ChangeDetectionStrategy,
+  OnInit,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -27,6 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { merge } from 'rxjs';
+import { User } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-profile-update',
@@ -47,10 +49,17 @@ import { merge } from 'rxjs';
   templateUrl: './profile-update.component.html',
   styleUrl: './profile-update.component.css',
 })
-export class ProfileUpdateComponent {
+export class ProfileUpdateComponent implements OnInit {
   http = inject(HttpClient);
   router = inject(Router);
   authService = inject(AuthService);
+
+  userdata = [];
+
+  ngOnInit(): void {
+    let user = JSON.parse(localStorage.getItem('user')!);
+    this.userdata = user[0];
+  }
 
   form = new FormGroup(
     {
