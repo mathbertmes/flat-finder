@@ -39,7 +39,8 @@ export class AuthService {
         firstName,
         lastName,
         birthDate,
-        role: "user"
+        role: "user",
+        favorites: []
       }
       updateProfile(response.user, { displayName: `${firstName} ${lastName}` });
       this.firestoreFunctions.createUser(newUser)

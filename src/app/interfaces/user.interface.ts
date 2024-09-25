@@ -5,4 +5,5 @@ export interface User{
   lastName: string;
   birthDate: Date;
   role: string;
+  favorites: string[];
 }
