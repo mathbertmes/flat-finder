@@ -6,11 +6,22 @@ import { FirestoreService } from '../firestore.service';
 import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common'; // Import CommonModule for async pipe
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [MatTableModule, CommonModule, MatPaginator, MatPaginatorModule], // Add CommonModule
+  imports: [
+    MatTableModule,
+    CommonModule,
+    MatPaginator,
+    MatPaginatorModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule,
+  ], // Add CommonModule
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
