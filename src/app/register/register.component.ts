@@ -62,7 +62,7 @@ export class RegisterComponent {
         Validators.minLength(2),
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      birthDate: new FormControl('', [
+      birthDate: new FormControl(new Date, [
         Validators.required,
         this.ageRangeValidator(18, 120),
       ]),
@@ -144,14 +144,15 @@ export class RegisterComponent {
   onSubmit(): void {
     const rawForm = this.form.getRawValue();
     if (
-      (rawForm.email && rawForm.password && rawForm.firstName, rawForm.lastName)
+      (rawForm.email && rawForm.password && rawForm.firstName, rawForm.lastName && rawForm.birthDate)
     ) {
       this.authService
         .register(
           rawForm.email!,
           rawForm.password!,
           rawForm.firstName!,
-          rawForm.lastName!
+          rawForm.lastName!,
+          rawForm.birthDate!
         )
         .subscribe(() => {
           this.router.navigateByUrl('/');
