@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  justify-content: center; /* 水平方向の中央寄せ */
-  align-items: center; /* 垂直方向の中央寄せ */
-  height: calc(100vh - 80px); /* コンテナの高さを画面全体に設定 */
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px);
 }
