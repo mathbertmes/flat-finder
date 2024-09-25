@@ -143,21 +143,21 @@ export class ProfileUpdateComponent {
   }
 
   onSubmit(): void {
-    const rawForm = this.form.getRawValue();
-    if (
-      (rawForm.email && rawForm.password && rawForm.firstName, rawForm.lastName)
-    ) {
-      this.authService
-        .register(
-          rawForm.email!,
-          rawForm.password!,
-          rawForm.firstName!,
-          rawForm.lastName!
-        )
-        .subscribe(() => {
-          this.router.navigateByUrl('/');
-        });
-    }
+    // const rawForm = this.form.getRawValue();
+    // if (
+    //   (rawForm.email && rawForm.password && rawForm.firstName, rawForm.lastName)
+    // ) {
+    //   this.authService
+    //     .register(
+    //       rawForm.email!,
+    //       rawForm.password!,
+    //       rawForm.firstName!,
+    //       rawForm.lastName!
+    //     )
+    //     .subscribe(() => {
+    //       this.router.navigateByUrl('/');
+    //     });
+    // }
   }
 
   firstNameErrorMessage = signal('');
