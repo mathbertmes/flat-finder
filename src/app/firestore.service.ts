@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, query, updateDoc, where } from "@angular/fire/firestore";
+import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, getDoc, query, setDoc, updateDoc, where, } from "@angular/fire/firestore";
 import { Flat } from "./interfaces/flat.interface";
 import { Observable } from "rxjs";
 import { User } from "./interfaces/user.interface";
@@ -18,17 +18,16 @@ export class FirestoreService {
     await addDoc(tasksCollection, flat); 
   }
 
-  async createUser(user: User): Promise<void> {
-    const usersCollection = collection(this.firestore, 'users'); 
-    await addDoc(usersCollection, user); 
-  }
-
+  async createUser(userId: string, user: User): Promise<void> {
+  const userDocRef = doc(this.firestore, 'users', userId);
+  await setDoc(userDocRef, user); 
+}
 
   getUser(id: string): Observable<User[]> {
     const usersCollection = collection(this.firestore, 'users')
     const userQuery = query(
       usersCollection,
-      where("id", "==", id)
+      where("uid", "==", id)
     )
 
     return collectionData(userQuery, { idField: 'id' }) as Observable<User[]>;
@@ -53,6 +52,11 @@ export class FirestoreService {
       flatsCollection
     )
     return collectionData(userTasksQuery, { idField: 'id' }) as Observable<Flat[]>;
+  }
+
+  async updateUser(userId: string, updatedData: Partial<User>): Promise<void> {
+    const userDocRef = doc(this.firestore, 'users', userId);
+    await updateDoc(userDocRef, updatedData);
   }
 
 }
