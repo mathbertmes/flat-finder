@@ -9,6 +9,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
+import { ProfileUpdateComponent } from '../profile-update/profile-update.component';
+import { log } from 'console';
 
 @Component({
   selector: 'app-profile',
@@ -21,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
+    ProfileUpdateComponent,
   ], // Add CommonModule
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -40,6 +43,7 @@ export class ProfileComponent implements OnInit {
     'lastName',
     'userEmail',
     'birthDate',
+    'edit',
   ];
 
   ngOnInit(): void {
@@ -50,13 +54,12 @@ export class ProfileComponent implements OnInit {
         this.flats$ = [];
       }
     });
+  }
 
-    const fullName = localStorage.getItem('userFullName');
+  storedData: any = localStorage.getItem('user');
+  userData = JSON.parse(this.storedData);
 
-    if (fullName) {
-      const nameParts = fullName.split(' ');
-      this.firstName = nameParts[0];
-      this.lastName = nameParts[1];
-    }
+  fn1() {
+    console.log('function1');
   }
 }

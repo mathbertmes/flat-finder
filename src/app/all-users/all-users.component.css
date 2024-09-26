@@ -1,3 +1,7 @@
 .example-full-width {
   width: 15%;
 }
+
+.text-red {
+  color: rgb(228, 18, 18);
+}
