@@ -79,6 +79,18 @@
     <td mat-cell *matCellDef="let element"> {{element.dataAvailable}} </td>
   </ng-container>
 
+  <ng-container matColumnDef="favorite">
+    <th mat-header-cell *matHeaderCellDef> Favorite </th>
+    <td mat-cell *matCellDef="let element"> 
+      <ng-container *ngIf="userFavoritesFlats.includes(element.id); else showImageB">
+        <mat-icon (click)="handleFavorite(element.id)" svgIcon="star_fill_icon" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
+      </ng-container>
+      <ng-template #showImageB>
+        <mat-icon (click)="handleFavorite(element.id)" svgIcon="star_icon" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
+      </ng-template>
+    </td>
+  </ng-container>
+
   <!-- Header and Row Declarations -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
