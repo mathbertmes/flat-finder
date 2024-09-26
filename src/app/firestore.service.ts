@@ -24,14 +24,14 @@ export class FirestoreService {
   }
 
 
-  getUser(id: string): Observable<User> {
-    const usersCollection = collection(this.firestore, 'users'); 
+  getUser(id: string): Observable<User[]> {
+    const usersCollection = collection(this.firestore, 'users')
     const userQuery = query(
       usersCollection,
       where("id", "==", id)
     )
 
-    return collectionData(userQuery, { idField: 'id' }) as Observable<User>;
+    return collectionData(userQuery, { idField: 'id' }) as Observable<User[]>;
   }
 
   //READ ALL FLATS FROM USER
@@ -41,6 +41,7 @@ export class FirestoreService {
       flatsCollection,
       where("userId", "==", userId)
     )
+    
 
     return collectionData(userQuery, { idField: 'id' }) as Observable<Flat[]>;
   }
