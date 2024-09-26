@@ -34,7 +34,7 @@ export class AuthService {
       password
     ).then((response) => {
       let newUser : User = {
-        id: response.user.uid,
+        uid: response.user.uid,
         email,
         firstName,
         lastName,
@@ -43,8 +43,9 @@ export class AuthService {
         favorites: []
       }
       updateProfile(response.user, { displayName: `${firstName} ${lastName}` });
-      this.firestoreFunctions.createUser(newUser)
+      this.firestoreFunctions.createUser(response.user.uid, newUser)
       localStorage.setItem("user", JSON.stringify(newUser))
+      localStorage.setItem("userFavorites", JSON.stringify(newUser.favorites))
       localStorage.setItem("userFullName", `${firstName} ${lastName}`);
       localStorage.setItem("userEmail", email)
       localStorage.setItem('userId', response.user.uid);
@@ -60,8 +61,9 @@ export class AuthService {
       password
     ).then((response) => {
       this.firestoreFunctions.getUser(response.user.uid).subscribe((user) => {
-        if(user.length){
+        if(user){
           localStorage.setItem("user", JSON.stringify(user[0]))
+          localStorage.setItem("userFavorites", JSON.stringify(user[0].favorites))
         }
       })
       localStorage.setItem("userFullName", response.user.displayName!)
@@ -73,6 +75,7 @@ export class AuthService {
 
   logout(): Observable<void> {
     const promise = signOut(this.firebaseAuth);
+    localStorage.removeItem("userFavorites")
     localStorage.removeItem("userFullName")
     localStorage.removeItem('userId')
     localStorage.removeItem('userEmail')
