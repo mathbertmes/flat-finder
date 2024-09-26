@@ -61,7 +61,7 @@ export class AuthService {
       password
     ).then((response) => {
       this.firestoreFunctions.getUser(response.user.uid).subscribe((user) => {
-        if(user){
+        if(user.length){
           localStorage.setItem("user", JSON.stringify(user[0]))
           localStorage.setItem("userFavorites", JSON.stringify(user[0].favorites))
         }
