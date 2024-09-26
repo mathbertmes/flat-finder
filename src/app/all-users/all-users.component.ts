@@ -11,6 +11,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-all-users',
@@ -25,6 +28,9 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatRadioModule,
+    MatIconModule,
+    MatMenuModule,
   ],
   templateUrl: './all-users.component.html',
   styleUrls: ['./all-users.component.css'],
@@ -36,18 +42,22 @@ export class AllUsersComponent implements OnInit {
   users$: any = [];
 
   displayedColumns: string[] = [
-    'city',
-    'userFullName',
+    'firstName',
+    'lastName',
     'userEmail',
     'streetNumber',
+    'flatsCounter',
+    'IsAdmin',
+    'operation',
   ];
 
   formFilter = new FormGroup({
-    city: new FormControl(''),
-    minPrice: new FormControl(0),
-    maxPrice: new FormControl(0),
-    minArea: new FormControl(0),
-    maxArea: new FormControl(0),
+    userType: new FormControl(''),
+    minAge: new FormControl(0),
+    maxAge: new FormControl(0),
+    minFlatsCounter: new FormControl(0),
+    maxFlatsCounter: new FormControl(0),
+    IsAdmin: new FormControl(),
   });
 
   onFilter() {
@@ -57,22 +67,29 @@ export class AllUsersComponent implements OnInit {
         console.log(flats);
         const rawForm = this.formFilter.getRawValue();
 
-        if (rawForm.city) {
+        if (rawForm.userType) {
           flats = flats.filter((flat) =>
-            flat.city.toUpperCase().includes(rawForm.city!.toUpperCase())
+            flat.city.toUpperCase().includes(rawForm.userType!.toUpperCase())
           );
         }
-        if (rawForm.minPrice !== 0) {
-          flats = flats.filter((flat) => flat.rentPrice >= rawForm.minPrice!);
+        if (rawForm.minAge !== 0) {
+          flats = flats.filter((flat) => flat.rentPrice >= rawForm.minAge!);
         }
-        if (rawForm.maxPrice !== 0) {
-          flats = flats.filter((flat) => flat.rentPrice <= rawForm.maxPrice!);
+        if (rawForm.maxAge !== 0) {
+          flats = flats.filter((flat) => flat.rentPrice <= rawForm.maxAge!);
         }
-        if (rawForm.minArea !== 0) {
-          flats = flats.filter((flat) => flat.areaSize >= rawForm.minArea!);
+        if (rawForm.minFlatsCounter !== 0) {
+          flats = flats.filter(
+            (flat) => flat.areaSize >= rawForm.minFlatsCounter!
+          );
         }
-        if (rawForm.maxArea !== 0) {
-          flats = flats.filter((flat) => flat.areaSize <= rawForm.maxArea!);
+        if (rawForm.maxFlatsCounter !== 0) {
+          flats = flats.filter(
+            (flat) => flat.areaSize <= rawForm.maxFlatsCounter!
+          );
+        }
+        if (rawForm.IsAdmin !== 0) {
+          flats = flats.filter((flat) => flat.areaSize <= rawForm.IsAdmin!);
         }
 
         console.log(flats);
@@ -92,5 +109,15 @@ export class AllUsersComponent implements OnInit {
         this.users$ = [];
       }
     });
+  }
+
+  fn1() {
+    console.log('function1');
+  }
+  fn2() {
+    console.log('function2');
+  }
+  fn3() {
+    console.log('function3');
   }
 }
