@@ -60,12 +60,13 @@ export class AuthService {
       password
     ).then((response) => {
       this.firestoreFunctions.getUser(response.user.uid).subscribe((user) => {
-        localStorage.setItem("user", JSON.stringify(user))
+        if(user.length){
+          localStorage.setItem("user", JSON.stringify(user[0]))
+        }
       })
       localStorage.setItem("userFullName", response.user.displayName!)
       localStorage.setItem("userEmail", response.user.email!)
       localStorage.setItem('userId', response.user.uid)
-      console.log(response.user)
     })
     return from(promise);
   }
