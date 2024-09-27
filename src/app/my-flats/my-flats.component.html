@@ -68,6 +68,26 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="operation">
+    <th mat-header-cell *matHeaderCellDef> Operation </th>
+    <td mat-cell *matCellDef=""> <button mat-icon-button [matMenuTriggerFor]="menu"
+        aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="fn1()">
+          <span>Open flat view</span>
+        </button>
+        <button mat-menu-item (click)="fn2()">
+          <span>Edit flat</span>
+        </button>
+        <button mat-menu-item (click)="fn3()">
+          <span class="text-red">Delete flat</span>
+        </button>
+      </mat-menu>
+    </td>
+  </ng-container>
+
   <!-- Header and Row Declarations -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
