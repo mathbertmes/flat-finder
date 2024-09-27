@@ -62,7 +62,7 @@ export class RegisterComponent {
         Validators.minLength(2),
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      birthDate: new FormControl(new Date, [
+      birthDate: new FormControl(new Date(), [
         Validators.required,
         this.ageRangeValidator(18, 120),
       ]),
@@ -142,9 +142,14 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    const rawForm = this.form.getRawValue();
+    const rawForm: any = this.form.getRawValue();
     if (
-      (rawForm.email && rawForm.password && rawForm.firstName, rawForm.lastName && rawForm.birthDate)
+      (rawForm.email && rawForm.password && rawForm.firstName,
+      rawForm.lastName &&
+        rawForm.birthDate &&
+        rawForm.role &&
+        rawForm.favorites &&
+        rawForm.p1)
     ) {
       this.authService
         .register(
@@ -152,7 +157,9 @@ export class RegisterComponent {
           rawForm.password!,
           rawForm.firstName!,
           rawForm.lastName!,
-          rawForm.birthDate!
+          rawForm.birthDate!,
+          rawForm.role!,
+          rawForm.favorites!
         )
         .subscribe(() => {
           this.router.navigateByUrl('/');

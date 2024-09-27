@@ -23,8 +23,6 @@ const STAR_ICON = `
   <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="m352-293 128-76 129 76-34-144 111-95-147-13-59-137-59 137-147 13 112 95-34 144ZM243-144l63-266L96-589l276-24 108-251 108 252 276 23-210 179 63 266-237-141-237 141Zm237-333Z"/></svg>
 `;
 
-
-
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -53,10 +51,16 @@ export class HomeComponent implements OnInit {
     // Note that we provide the icon here as a string literal here due to a limitation in
     // Stackblitz. If you want to provide the icon from a URL, you can use:
     // `iconRegistry.addSvgIcon('thumbs-up', sanitizer.bypassSecurityTrustResourceUrl('icon.svg'));`
-    iconRegistry.addSvgIconLiteral('star_fill_icon', sanitizer.bypassSecurityTrustHtml(STAR_FILL_ICON));
-    iconRegistry.addSvgIconLiteral('star_icon', sanitizer.bypassSecurityTrustHtml(STAR_ICON));
+    iconRegistry.addSvgIconLiteral(
+      'star_fill_icon',
+      sanitizer.bypassSecurityTrustHtml(STAR_FILL_ICON)
+    );
+    iconRegistry.addSvgIconLiteral(
+      'star_icon',
+      sanitizer.bypassSecurityTrustHtml(STAR_ICON)
+    );
   }
-  
+
   // Ensure the observable won't emit null values, falling back to an empty array
   flats$: Flat[] = [];
 

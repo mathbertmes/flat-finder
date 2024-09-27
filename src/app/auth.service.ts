@@ -20,36 +20,36 @@ export class AuthService {
   user$ = user(this.firebaseAuth);
   userId$: string | undefined;
 
-
   register(
     email: string,
     password: string,
     firstName: string,
     lastName: string,
-    birthDate: Date
+    birthDate: Date,
+    role: any,
+    favorites: any
   ): Observable<void> {
     const promise = createUserWithEmailAndPassword(
       this.firebaseAuth,
       email,
       password
     ).then((response) => {
-      let newUser : User = {
+      let newUser: User = {
         uid: response.user.uid,
         email,
         firstName,
         lastName,
         birthDate,
-        role: "user",
-        favorites: []
-      }
+        role: 'user',
+        favorites: [],
+      };
       updateProfile(response.user, { displayName: `${firstName} ${lastName}` });
-      this.firestoreFunctions.createUser(response.user.uid, newUser)
-      localStorage.setItem("user", JSON.stringify(newUser))
-      localStorage.setItem("userFavorites", JSON.stringify(newUser.favorites))
-      localStorage.setItem("userFullName", `${firstName} ${lastName}`);
-      localStorage.setItem("userEmail", email)
+      this.firestoreFunctions.createUser(response.user.uid, newUser);
+      localStorage.setItem('user', JSON.stringify(newUser));
+      localStorage.setItem('userFavorites', JSON.stringify(newUser.favorites));
+      localStorage.setItem('userFullName', `${firstName} ${lastName}`);
+      localStorage.setItem('userEmail', email);
       localStorage.setItem('userId', response.user.uid);
-      
     });
     return from(promise);
   }
@@ -61,25 +61,28 @@ export class AuthService {
       password
     ).then((response) => {
       this.firestoreFunctions.getUser(response.user.uid).subscribe((user) => {
-        if(user.length){
-          localStorage.setItem("user", JSON.stringify(user[0]))
-          localStorage.setItem("userFavorites", JSON.stringify(user[0].favorites))
+        if (user.length) {
+          localStorage.setItem('user', JSON.stringify(user[0]));
+          localStorage.setItem(
+            'userFavorites',
+            JSON.stringify(user[0].favorites)
+          );
         }
-      })
-      localStorage.setItem("userFullName", response.user.displayName!)
-      localStorage.setItem("userEmail", response.user.email!)
-      localStorage.setItem('userId', response.user.uid)
-    })
+      });
+      localStorage.setItem('userFullName', response.user.displayName!);
+      localStorage.setItem('userEmail', response.user.email!);
+      localStorage.setItem('userId', response.user.uid);
+    });
     return from(promise);
   }
 
   logout(): Observable<void> {
     const promise = signOut(this.firebaseAuth);
-    localStorage.removeItem("userFavorites")
-    localStorage.removeItem("userFullName")
-    localStorage.removeItem('userId')
-    localStorage.removeItem('userEmail')
-    localStorage.removeItem('user')
+    localStorage.removeItem('userFavorites');
+    localStorage.removeItem('userFullName');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('user');
     return from(promise);
   }
 }

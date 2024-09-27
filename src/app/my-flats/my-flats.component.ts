@@ -9,11 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FirestoreService } from '../firestore.service';
 import { Flat } from '../interfaces/flat.interface';
-
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 @Component({
   selector: 'app-my-flats',
   standalone: true,
-  imports: [MatTableModule,
+  imports: [
+    MatTableModule,
     CommonModule,
     MatPaginator,
     MatPaginatorModule,
@@ -21,17 +22,19 @@ import { Flat } from '../interfaces/flat.interface';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,],
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './my-flats.component.html',
   styleUrl: './my-flats.component.css',
 })
-export class MyFlatsComponent implements OnInit{
-
+export class MyFlatsComponent implements OnInit {
   firestore = inject(FirestoreService);
 
   // Ensure the observable won't emit null values, falling back to an empty array
   flats$: Flat[] = [];
-  userId = localStorage.getItem('userId')
+
+  userFavoritesFlats: string[] = [];
 
   displayedColumns: string[] = [
     'city',
@@ -43,10 +46,36 @@ export class MyFlatsComponent implements OnInit{
     'yearBuild',
     'rentPrice',
     'dataAvailable',
+    'favorite',
   ];
 
+  handleFavorite(id: string): void {
+    const favoritesList = this.userFavoritesFlats;
+    const userId = localStorage.getItem('userId')!;
+    if (favoritesList.includes(id)) {
+      favoritesList.splice(favoritesList.indexOf(id), 1);
+    } else {
+      favoritesList.push(id);
+    }
+    this.userFavoritesFlats = favoritesList;
+    localStorage.setItem('userFavorites', JSON.stringify(favoritesList));
+
+    const updatedUser = {
+      favorites: favoritesList,
+    };
+
+    this.firestore.updateUser(userId, updatedUser);
+  }
+
+  storedData: any = localStorage.getItem('user');
+  userData = JSON.parse(this.storedData);
+
   ngOnInit(): void {
-    this.firestore.getUserFlats(this.userId!).subscribe((flats) => {
+    const userFavorites = JSON.parse(localStorage.getItem('userFavorites')!);
+    this.userFavoritesFlats = userFavorites;
+    console.log(this.userFavoritesFlats);
+    const userId = this.userData.uid;
+    this.firestore.getUserFlats(userId).subscribe((flats) => {
       if (flats) {
         this.flats$ = flats;
       } else {
@@ -54,5 +83,4 @@ export class MyFlatsComponent implements OnInit{
       }
     });
   }
-
 }

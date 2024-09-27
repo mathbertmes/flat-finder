@@ -37,13 +37,13 @@
     <!-- City Column -->
     <ng-container matColumnDef="firstName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.userFullName.split(' ')[0]}} </td>
     </ng-container>
 
     <!-- Owner Name Column -->
     <ng-container matColumnDef="lastName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.userFullName}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.userFullName.split(' ')[1]}} </td>
     </ng-container>
 
     <!-- Owner Email Column -->
