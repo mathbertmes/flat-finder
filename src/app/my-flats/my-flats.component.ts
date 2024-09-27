@@ -9,7 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FirestoreService } from '../firestore.service';
 import { Flat } from '../interfaces/flat.interface';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 @Component({
   selector: 'app-my-flats',
   standalone: true,
@@ -24,6 +25,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatMenuModule,
   ],
   templateUrl: './my-flats.component.html',
   styleUrl: './my-flats.component.css',
@@ -47,6 +49,7 @@ export class MyFlatsComponent implements OnInit {
     'rentPrice',
     'dataAvailable',
     'favorite',
+    'operation',
   ];
 
   handleFavorite(id: string): void {
@@ -83,5 +86,15 @@ export class MyFlatsComponent implements OnInit {
         this.flats$ = [];
       }
     });
+  }
+
+  fn1() {
+    console.log('function1');
+  }
+  fn2() {
+    console.log('function2');
+  }
+  fn3() {
+    console.log('function3');
   }
 }

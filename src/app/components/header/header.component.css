@@ -26,6 +26,8 @@ h1 {
   font-weight: normal;
   background: white;
   padding: 5px 10px;
+  font-family: "Poppins", sans-serif;
+  color: rgb(101, 101, 101);
 }
 
 .userFullName {

@@ -52,7 +52,7 @@ export class AllUsersComponent implements OnInit {
   ];
 
   formFilter = new FormGroup({
-    userType: new FormControl(''),
+    firstName: new FormControl(''),
     minAge: new FormControl(0),
     maxAge: new FormControl(0),
     minFlatsCounter: new FormControl(0),
@@ -67,11 +67,11 @@ export class AllUsersComponent implements OnInit {
         console.log(users);
         const rawForm = this.formFilter.getRawValue();
 
-        if (rawForm.userType) {
+        if (rawForm.firstName) {
           users = users.filter((user) =>
             user.firstName
               .toUpperCase()
-              .includes(rawForm.userType!.toUpperCase())
+              .includes(rawForm.firstName!.toUpperCase())
           );
         }
         if (rawForm.minAge !== 0) {
