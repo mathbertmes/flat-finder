@@ -1,32 +1,32 @@
-<table mat-table [dataSource]="flats$ ">
+<table mat-table [dataSource]="users$ ">
 
     <!-- First Name Column -->
     <ng-container matColumnDef="firstName">
         <th mat-header-cell *matHeaderCellDef> First Name </th>
-        <td mat-cell *matCellDef="let element"> {{ userData.firstName }} </td>
+        <td mat-cell *matCellDef=""> {{ userData.firstName }} </td>
     </ng-container>
 
     <!-- Last Name Column -->
     <ng-container matColumnDef="lastName">
         <th mat-header-cell *matHeaderCellDef> Last Name </th>
-        <td mat-cell *matCellDef="let element"> {{ userData.lastName }} </td>
+        <td mat-cell *matCellDef=""> {{ userData.lastName }} </td>
     </ng-container>
 
     <!-- Email Column -->
     <ng-container matColumnDef="userEmail">
         <th mat-header-cell *matHeaderCellDef> Email </th>
-        <td mat-cell *matCellDef="let element"> {{ userData.email }} </td>
+        <td mat-cell *matCellDef=""> {{ userData.email }} </td>
     </ng-container>
 
     <!-- Birth Date Column -->
     <ng-container matColumnDef="birthDate">
         <th mat-header-cell *matHeaderCellDef> Birth Date </th>
-        <td mat-cell *matCellDef="let element"> {{ userData.birthDate }} </td>
+        <td mat-cell *matCellDef=""> {{ userData.birthDate }} </td>
     </ng-container>
 
     <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element"><button mat-flat-button (click)="fn1()">Edit</button>
+        <td mat-cell *matCellDef=""><button mat-flat-button (click)="toggleComponent()">Edit</button>
         </td>
     </ng-container>
 
@@ -37,6 +37,5 @@
 </table>
 
 <div class="container">
-    <!-- <app-profile-update></app-profile-update> -->
-    <!-- <a href="/profile-update"><button mat-flat-button>Edit profile</button></a> -->
+    <app-profile-update *ngIf="showComponent"></app-profile-update>
 </div>

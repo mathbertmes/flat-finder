@@ -4,18 +4,18 @@
             <div *ngIf="isMobile">
                 <button mat-button [matMenuTriggerFor]="menu" class="custom-button">Menu</button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item>Home</button>
-                    <button mat-menu-item>My Profile</button>
-                    <button mat-menu-item>My Flats</button>
-                    <button mat-menu-item>Favorites</button>
-                    <button mat-menu-item>All Users</button>
-                    <button mat-menu-item>Delete Account</button>
+                    <a routerLink="/"><button mat-menu-item>Home</button></a>
+                    <a routerLink="/profile"><button mat-menu-item>My Profile</button></a>
+                    <a routerLink="/my-flats"><button mat-menu-item>My Flats</button></a>
+                    <a routerLink="/favorites"><button mat-menu-item>Favorites</button></a>
+                    <a routerLink="/all-users"><button mat-menu-item>All Users</button></a>
+                    <a routerLink="/delete-account"><button mat-menu-item>Delete Account</button></a>
                 </mat-menu>
             </div>
         </div>
 
         <div>
-            <h1>Company Logo</h1>
+            <h1>Flat Finder</h1>
         </div>
 
         <div class="flex menuItems">

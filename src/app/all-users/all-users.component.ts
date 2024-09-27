@@ -111,6 +111,9 @@ export class AllUsersComponent implements OnInit {
     });
   }
 
+  storedData: any = localStorage.getItem('user');
+  userData = JSON.parse(this.storedData);
+
   fn1() {
     console.log('function1');
   }
