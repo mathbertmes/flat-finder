@@ -1,11 +1,9 @@
-<p>all-users works!</p>
-<p>(shown only to admin)</p>
-
+<p>all-users works! (shown only to admin)</p>
 <div>
     <form [formGroup]="formFilter" (ngSubmit)="onFilter()" class="flex gap-2">
         <mat-form-field class="example-full-width">
             <mat-label>User Type</mat-label>
-            <input matInput placeholder="City" formControlName="city">
+            <input matInput placeholder="City" formControlName="firstName">
         </mat-form-field>
         <mat-form-field class="example-full-width">
             <mat-label>Min age</mat-label>
@@ -37,25 +35,25 @@
     <!-- City Column -->
     <ng-container matColumnDef="firstName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.userFullName.split(' ')[0]}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
     </ng-container>
 
     <!-- Owner Name Column -->
     <ng-container matColumnDef="lastName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.userFullName.split(' ')[1]}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
     </ng-container>
 
     <!-- Owner Email Column -->
     <ng-container matColumnDef="userEmail">
         <th mat-header-cell *matHeaderCellDef> Email </th>
-        <td mat-cell *matCellDef="let element"> {{element.userEmail}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
     </ng-container>
 
     <!-- Street Number Column -->
-    <ng-container matColumnDef="streetNumber">
+    <ng-container matColumnDef="birthDate">
         <th mat-header-cell *matHeaderCellDef> Birth Date </th>
-        <td mat-cell *matCellDef="let element"> {{element.streetNumber}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.birthDate}} </td>
     </ng-container>
 
     <ng-container matColumnDef="flatsCounter">
