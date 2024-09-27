@@ -140,6 +140,7 @@ export class NewFlatComponent {
 
       this.firestoreService.createFlat(newFlat);
     }
+    this.router.navigateByUrl('/my-flats');
   }
 
   cityErrorMessage = signal('');
