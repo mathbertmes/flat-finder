@@ -7,7 +7,7 @@ import {
   updateProfile,
   user,
 } from '@angular/fire/auth';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { FirestoreService } from './firestore.service';
 import { User } from './interfaces/user.interface';
 
@@ -84,5 +84,42 @@ export class AuthService {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('user');
     return from(promise);
+  }
+
+  updateProfile(
+    email: string,
+    firstName: string,
+    lastName: string,
+    birthDate: Date
+  ): Observable<void> {
+    const user = this.firebaseAuth.currentUser;
+
+    if (user) {
+      const updatedUser = {
+        uid: user.uid,
+        email,
+        firstName,
+        lastName,
+        birthDate,
+      };
+
+      // Firebase Auth の表示名更新
+      const promise = updateProfile(user, {
+        displayName: `${firstName} ${lastName}`,
+      }).then(() => {
+        // Firestore のユーザーデータを更新
+        this.firestoreFunctions.updateUser(user.uid, updatedUser);
+
+        // ローカルストレージの更新
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        localStorage.setItem('userFullName', `${firstName} ${lastName}`);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userId', user.uid);
+      });
+
+      return from(promise);
+    } else {
+      return of(); // エラー処理を適宜追加
+    }
   }
 }

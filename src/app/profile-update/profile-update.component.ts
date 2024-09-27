@@ -56,6 +56,9 @@ export class ProfileUpdateComponent implements OnInit {
 
   userdata = [];
 
+  storedData: any = localStorage.getItem('user')!;
+  userData = JSON.parse(this.storedData);
+
   ngOnInit(): void {
     let user = JSON.parse(localStorage.getItem('user')!);
     this.userdata = user[0];
@@ -63,16 +66,19 @@ export class ProfileUpdateComponent implements OnInit {
 
   form = new FormGroup(
     {
-      firstName: new FormControl('', [
+      firstName: new FormControl(this.userData.firstName, [
         Validators.required,
         Validators.minLength(2),
       ]),
-      lastName: new FormControl('', [
+      lastName: new FormControl(this.userData.lastName, [
         Validators.required,
         Validators.minLength(2),
       ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      birthDate: new FormControl('', [
+      email: new FormControl(this.userData.email, [
+        Validators.required,
+        Validators.email,
+      ]),
+      birthDate: new FormControl(this.userData.birthDate, [
         Validators.required,
         this.ageRangeValidator(18, 120),
       ]),
@@ -152,21 +158,25 @@ export class ProfileUpdateComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // const rawForm = this.form.getRawValue();
-    // if (
-    //   (rawForm.email && rawForm.password && rawForm.firstName, rawForm.lastName)
-    // ) {
-    //   this.authService
-    //     .register(
-    //       rawForm.email!,
-    //       rawForm.password!,
-    //       rawForm.firstName!,
-    //       rawForm.lastName!
-    //     )
-    //     .subscribe(() => {
-    //       this.router.navigateByUrl('/');
-    //     });
-    // }
+    const rawForm = this.form.getRawValue();
+    if (
+      rawForm.email &&
+      rawForm.firstName &&
+      rawForm.lastName &&
+      rawForm.birthDate
+    ) {
+      this.authService
+        .updateProfile(
+          rawForm.email!,
+          rawForm.firstName!,
+          rawForm.lastName!,
+          rawForm.birthDate!
+        )
+        .subscribe(() => {
+          window.location.reload();
+          this.router.navigateByUrl('/profile');
+        });
+    }
   }
 
   firstNameErrorMessage = signal('');
