@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators'; // Import the map operator
-import { Flat } from '../interfaces/flat.interface';
 import { FirestoreService } from '../firestore.service';
 import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common'; // Import CommonModule for async pipe
@@ -14,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { User } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-all-users',
@@ -45,7 +45,7 @@ export class AllUsersComponent implements OnInit {
     'firstName',
     'lastName',
     'userEmail',
-    'streetNumber',
+    'birthDate',
     'flatsCounter',
     'IsAdmin',
     'operation',
@@ -61,40 +61,38 @@ export class AllUsersComponent implements OnInit {
   });
 
   onFilter() {
-    let allUsers: Flat[] = [];
-    this.firestore.getFlats().subscribe((flats) => {
-      if (flats) {
-        console.log(flats);
+    let allUsers: User[] = [];
+    this.firestore.getAllUsers().subscribe((users) => {
+      if (users) {
+        console.log(users);
         const rawForm = this.formFilter.getRawValue();
 
         if (rawForm.userType) {
-          flats = flats.filter((flat) =>
-            flat.city.toUpperCase().includes(rawForm.userType!.toUpperCase())
+          users = users.filter((user) =>
+            user.firstName
+              .toUpperCase()
+              .includes(rawForm.userType!.toUpperCase())
           );
         }
         if (rawForm.minAge !== 0) {
-          flats = flats.filter((flat) => flat.rentPrice >= rawForm.minAge!);
+          users = users.filter((user) => 1 >= rawForm.minAge!);
         }
         if (rawForm.maxAge !== 0) {
-          flats = flats.filter((flat) => flat.rentPrice <= rawForm.maxAge!);
+          users = users.filter((user) => 1 <= rawForm.maxAge!);
         }
         if (rawForm.minFlatsCounter !== 0) {
-          flats = flats.filter(
-            (flat) => flat.areaSize >= rawForm.minFlatsCounter!
-          );
+          users = users.filter((user) => 1 >= rawForm.minFlatsCounter!);
         }
         if (rawForm.maxFlatsCounter !== 0) {
-          flats = flats.filter(
-            (flat) => flat.areaSize <= rawForm.maxFlatsCounter!
-          );
+          users = users.filter((user) => 1 <= rawForm.maxFlatsCounter!);
         }
         if (rawForm.IsAdmin !== 0) {
-          flats = flats.filter((flat) => flat.areaSize <= rawForm.IsAdmin!);
+          users = users.filter((user) => 1 <= rawForm.IsAdmin!);
         }
 
-        console.log(flats);
+        console.log(users);
 
-        this.users$ = flats;
+        this.users$ = users;
       } else {
         allUsers = [];
       }
@@ -102,9 +100,9 @@ export class AllUsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.firestore.getFlats().subscribe((flats) => {
-      if (flats) {
-        this.users$ = flats;
+    this.firestore.getAllUsers().subscribe((users) => {
+      if (users) {
+        this.users$ = users;
       } else {
         this.users$ = [];
       }
