@@ -41,9 +41,9 @@ export class FirestoreService {
   }
 
   getAllUsers(): Observable<User[]> {
-    const flatsCollection = collection(this.firestore, 'users');
-    const userTasksQuery = query(flatsCollection);
-    return collectionData(userTasksQuery, { idField: 'id' }) as Observable<
+    const usersCollection = collection(this.firestore, 'users');
+    const usersQuery = query(usersCollection, where('deleted', '==', false));
+    return collectionData(usersQuery, { idField: 'id' }) as Observable<
       User[]
     >;
   }
@@ -68,5 +68,10 @@ export class FirestoreService {
   async updateUser(userId: string, updatedData: Partial<User>): Promise<void> {
     const userDocRef = doc(this.firestore, 'users', userId);
     await updateDoc(userDocRef, updatedData);
+  }
+
+  deleteUserData(userId: string): Promise<void> {
+    const userDocRef = doc(this.firestore, 'users', userId);
+    return deleteDoc(userDocRef);
   }
 }

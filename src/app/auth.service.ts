@@ -42,6 +42,7 @@ export class AuthService {
         birthDate,
         role: 'user',
         favorites: [],
+        deleted: false
       };
       updateProfile(response.user, { displayName: `${firstName} ${lastName}` });
       this.firestoreFunctions.createUser(response.user.uid, newUser);
@@ -60,18 +61,26 @@ export class AuthService {
       email,
       password
     ).then((response) => {
+      console.log(response.user);
       this.firestoreFunctions.getUser(response.user.uid).subscribe((user) => {
         if (user.length) {
-          localStorage.setItem('user', JSON.stringify(user[0]));
-          localStorage.setItem(
+          if(user[0].deleted){
+            alert("This user is banned")
+            this.logout()
+          }else{
+            localStorage.setItem('user', JSON.stringify(user[0]));
+            localStorage.setItem(
             'userFavorites',
             JSON.stringify(user[0].favorites)
           );
+          localStorage.setItem('userFullName', response.user.displayName!);
+          localStorage.setItem('userEmail', response.user.email!);
+          localStorage.setItem('userId', response.user.uid);
+          }
+          
         }
       });
-      localStorage.setItem('userFullName', response.user.displayName!);
-      localStorage.setItem('userEmail', response.user.email!);
-      localStorage.setItem('userId', response.user.uid);
+
     });
     return from(promise);
   }
