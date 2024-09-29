@@ -107,9 +107,21 @@ export class AllUsersComponent implements OnInit {
     this.firestore.updateUser(userId, updatedUser);
   }
 
+  handleRemoveUser(userId: string){
+    const updatedUser = {
+      deleted: true,
+    };
+
+    this.firestore.updateUser(userId, updatedUser);
+  }
+
 
 
   ngOnInit(): void {
+    if(localStorage.getItem("userRole") !== "admin"){
+      window.location.replace("/")
+      return 
+    }
     this.firestore.getAllUsers().subscribe((users) => {
       if (users) {
         this.users$ = users;
