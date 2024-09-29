@@ -39,7 +39,7 @@ export class AllUsersComponent implements OnInit {
   firestore = inject(FirestoreService);
 
   // Ensure the observable won't emit null values, falling back to an empty array
-  users$: any = [];
+  users$: User[] = [];
 
   displayedColumns: string[] = [
     'firstName',
@@ -98,6 +98,16 @@ export class AllUsersComponent implements OnInit {
       }
     });
   }
+
+  handleUserRoleChange(userId: string, role: string){
+    const updatedUser = {
+      role: role === 'admin' ? 'user' : 'admin',
+    };
+
+    this.firestore.updateUser(userId, updatedUser);
+  }
+
+
 
   ngOnInit(): void {
     this.firestore.getAllUsers().subscribe((users) => {
