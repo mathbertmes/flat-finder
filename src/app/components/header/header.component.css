@@ -39,6 +39,10 @@ h1 {
   margin-right: 10px;
 }
 
+.logOut {
+  cursor: pointer;
+}
+
 .custom-button {
   margin-left: 10px;
   background-color: white;
