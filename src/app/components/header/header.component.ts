@@ -4,12 +4,14 @@ import {
   inject,
   Output,
   HostListener,
+  OnInit,
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../auth.service';
 import { NgIf } from '@angular/common';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-header',
@@ -18,8 +20,10 @@ import { NgIf } from '@angular/common';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
   isMobile: boolean = false;
+  userRole
+  
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -37,6 +41,8 @@ export class HeaderComponent {
 
   constructor() {
     this.checkWindowSize();
+    const userData: User = JSON.parse(localStorage.getItem("user")!)
+    this.userRole = userData.role
   }
   ngOnInit(): void {}
   onToggleSidenav() {
