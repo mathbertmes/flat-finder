@@ -1,4 +1,5 @@
 export interface Flat{
+  id?: string;
   userId: string;
   userFullName: string;
   userEmail: string;

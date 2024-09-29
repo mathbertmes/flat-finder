@@ -64,6 +64,8 @@ export class FavoritesComponent implements OnInit {
       favorites: favoritesList,
     };
 
+    this.flats$ = this.flats$.filter(flat =>  favoritesList.includes(flat.id!));
+
     this.firestore.updateUser(userId, updatedUser);
   }
 
@@ -73,7 +75,8 @@ export class FavoritesComponent implements OnInit {
     console.log(this.userFavoritesFlats);
     this.firestore.getFlats().subscribe((flats) => {
       if (flats) {
-        this.flats$ = flats;
+        let favoriteFlats = flats.filter(flat =>  userFavorites.includes(flat.id))
+        this.flats$ = favoriteFlats;
       } else {
         this.flats$ = [];
       }
