@@ -5,6 +5,7 @@ import {
   Output,
   HostListener,
   OnInit,
+  Input,
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +23,7 @@ import { User } from '../../interfaces/user.interface';
 })
 export class HeaderComponent implements OnInit{
   isMobile: boolean = false;
-  userRole
+  userRole : string | undefined
   
 
   @HostListener('window:resize', ['$event'])
@@ -41,16 +42,12 @@ export class HeaderComponent implements OnInit{
 
   constructor() {
     this.checkWindowSize();
-    if(localStorage.getItem("user")){
-      const userData: User = JSON.parse(localStorage.getItem("user")!)
-
-    this.userRole = userData.role
-    }else{
-      this.userRole = undefined
-    }
+    
     
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    
+  }
   onToggleSidenav() {
     // Open and close side nav bar
     this.sideNavToggle.emit();
