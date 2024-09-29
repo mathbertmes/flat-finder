@@ -1,4 +1,4 @@
-export interface Flat{
+export interface Flat {
   userId: string;
   userFullName: string;
   userEmail: string;
@@ -9,4 +9,12 @@ export interface Flat{
   yearBuild: number;
   rentPrice: number;
   dataAvailable: Date;
+  message: {
+    flatDocument: string;
+    userId: string;
+    timestamp: Date;
+    fromUserFirstName: string;
+    fromUserLastName: string;
+    fromUserEmail: string;
+  }[];
 }
