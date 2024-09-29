@@ -18,7 +18,7 @@
             <h1>Flat Finder</h1>
         </div>
 
-        <div class="flex menuItems">
+        <div *ngIf="userRole" class="flex menuItems">
             <a routerLink="/">Home</a>
             <a routerLink="/profile">My Profile</a>
             <a routerLink="/my-flats">My Flats</a>

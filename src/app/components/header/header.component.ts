@@ -41,8 +41,14 @@ export class HeaderComponent implements OnInit{
 
   constructor() {
     this.checkWindowSize();
-    const userData: User = JSON.parse(localStorage.getItem("user")!)
+    if(localStorage.getItem("user")){
+      const userData: User = JSON.parse(localStorage.getItem("user")!)
+
     this.userRole = userData.role
+    }else{
+      this.userRole = undefined
+    }
+    
   }
   ngOnInit(): void {}
   onToggleSidenav() {
