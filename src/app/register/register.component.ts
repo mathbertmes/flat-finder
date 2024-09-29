@@ -142,24 +142,19 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
+    console.log('onSubmit')
     const rawForm: any = this.form.getRawValue();
     if (
       (rawForm.email && rawForm.password && rawForm.firstName,
       rawForm.lastName &&
-        rawForm.birthDate &&
-        rawForm.role &&
-        rawForm.favorites &&
-        rawForm.p1)
+        rawForm.birthDate)
     ) {
-      this.authService
-        .register(
+      this.authService.register(
           rawForm.email!,
           rawForm.password!,
           rawForm.firstName!,
           rawForm.lastName!,
           rawForm.birthDate!,
-          rawForm.role!,
-          rawForm.favorites!
         )
         .subscribe(() => {
           this.router.navigateByUrl('/');
