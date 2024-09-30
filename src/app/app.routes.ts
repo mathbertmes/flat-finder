@@ -14,7 +14,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile-update', component: ProfileUpdateComponent },
-  { path: 'profile', component: ProfileComponent },
+  { path: 'profile/:id', component: ProfileComponent },
   { path: 'new-flat', component: NewFlatComponent },
   { path: 'favorites', component: FavoritesComponent },
   { path: 'my-flats', component: MyFlatsComponent },
