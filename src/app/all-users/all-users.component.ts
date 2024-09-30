@@ -14,6 +14,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { User } from '../interfaces/user.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-users',
@@ -37,6 +38,8 @@ import { User } from '../interfaces/user.interface';
 })
 export class AllUsersComponent implements OnInit {
   firestore = inject(FirestoreService);
+
+  constructor(private router: Router){}
 
   // Ensure the observable won't emit null values, falling back to an empty array
   users$: User[] = [];
@@ -115,7 +118,9 @@ export class AllUsersComponent implements OnInit {
     this.firestore.updateUser(userId, updatedUser);
   }
 
-
+  goToProfile(userId: string) {
+    this.router.navigate(['/profile', userId]); // Navega para a rota com o `id` do usuário
+  }
 
   ngOnInit(): void {
     if(localStorage.getItem("userRole") !== "admin"){
