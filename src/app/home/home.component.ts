@@ -150,50 +150,6 @@ export class HomeComponent implements OnInit {
     this.firestore.updateUser(userId, updatedUser);
   }
 
-  handleMessage(flatDocument: string): void {
-    const messageList: {
-      flatDocument: string;
-      userId: string;
-      timestamp: Date;
-      fromUserFirstName: string;
-      fromUserLastName: string;
-      fromUserEmail: string;
-    }[] = this.userMessages || [];
-    const fromUserFirstName = this.userData.firstName;
-    const fromUserLastName = this.userData.lastName;
-    const fromUserEmail = this.userData.email;
-    const userId = this.userData.uid;
-
-    const existingMessageIndex = messageList.findIndex(
-      (message) =>
-        message.flatDocument === flatDocument && message.userId === userId
-    );
-
-    if (existingMessageIndex !== -1) {
-      messageList.splice(existingMessageIndex, 1);
-    } else {
-      const timestamp = new Date();
-      messageList.push({
-        flatDocument,
-        userId,
-        timestamp,
-        fromUserFirstName,
-        fromUserLastName,
-        fromUserEmail,
-      });
-    }
-    this.userMessages = messageList;
-    localStorage.setItem('userMessages', JSON.stringify(messageList));
-
-    const updatedFlat = {
-      message: messageList,
-    };
-
-    this.firestore.updateFlat(flatDocument, updatedFlat);
-    alert('Sent a message to the owner of this property');
-    console.log('working', updatedFlat);
-  }
-
   ngOnInit(): void {
     const userFavorites = JSON.parse(localStorage.getItem('userFavorites')!);
     this.userFavoritesFlats = userFavorites;

@@ -16,8 +16,6 @@ import { Flat } from './interfaces/flat.interface';
 
 import { from, Observable } from 'rxjs';
 
-import { map, Observable } from 'rxjs';
-
 import { User } from './interfaces/user.interface';
 import { Message } from './interfaces/message.interface';
 
@@ -119,11 +117,5 @@ export class FirestoreService {
     const messagesQuery = query(messageCollection, where("flatId", '==', flatId), where("userId", '==', userId));
     return collectionData(messagesQuery, { idField: 'id' }) as Observable<
     Message[]
-    >;
-
-  async updateFlat(userId: string, updatedData: Partial<Flat>): Promise<void> {
-    const userDocRef = doc(this.firestore, 'flats', userId);
-    await updateDoc(userDocRef, updatedData);
-
-  }
+    >;}
 }
