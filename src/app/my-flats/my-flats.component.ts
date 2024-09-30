@@ -76,7 +76,6 @@ export class MyFlatsComponent implements OnInit {
   ngOnInit(): void {
     const userFavorites = JSON.parse(localStorage.getItem('userFavorites')!);
     this.userFavoritesFlats = userFavorites;
-    console.log(this.userFavoritesFlats);
 
     const userId = this.userData.uid;
     this.firestore.getUserFlats(userId).subscribe((flats) => {
