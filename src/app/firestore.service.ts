@@ -13,7 +13,11 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { Flat } from './interfaces/flat.interface';
+
 import { from, Observable } from 'rxjs';
+
+import { map, Observable } from 'rxjs';
+
 import { User } from './interfaces/user.interface';
 import { Message } from './interfaces/message.interface';
 
@@ -66,10 +70,11 @@ export class FirestoreService {
     >;
   }
 
-  getFlat(id: string): Observable<Flat | undefined> {
-    const flatDocRef = doc(this.firestore, 'flats', id); // Referência ao documento com o ID
 
-    // Converte a Promise do `getDoc` para um Observable com `from`
+  getFlat(id: string): Observable<Flat | undefined> {
+    const flatDocRef = doc(this.firestore, 'flats', id);
+
+    
     return from(
       getDoc(flatDocRef).then((snapshot) => {
         if (snapshot.exists()) {
@@ -85,6 +90,7 @@ export class FirestoreService {
     const userDocRef = doc(this.firestore, 'users', userId);
     await updateDoc(userDocRef, updatedData);
   }
+
 
   
 
@@ -114,5 +120,10 @@ export class FirestoreService {
     return collectionData(messagesQuery, { idField: 'id' }) as Observable<
     Message[]
     >;
+
+  async updateFlat(userId: string, updatedData: Partial<Flat>): Promise<void> {
+    const userDocRef = doc(this.firestore, 'flats', userId);
+    await updateDoc(userDocRef, updatedData);
+
   }
 }

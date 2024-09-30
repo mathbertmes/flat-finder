@@ -1,8 +1,18 @@
-
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 1,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 20
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 20;
+}
+
+a {
+  text-decoration: none;
+}
+
+span {
+  color: black;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+.send {
+  cursor: pointer;
 }

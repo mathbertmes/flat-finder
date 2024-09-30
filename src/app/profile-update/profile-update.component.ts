@@ -159,6 +159,7 @@ export class ProfileUpdateComponent implements OnInit {
 
   onSubmit(): void {
     const rawForm = this.form.getRawValue();
+
     if (
       rawForm.email &&
       rawForm.firstName &&
@@ -176,6 +177,8 @@ export class ProfileUpdateComponent implements OnInit {
           window.location.reload();
           this.router.navigateByUrl('/profile');
         });
+    } else {
+      console.error('Form is invalid or missing values:', rawForm);
     }
   }
 

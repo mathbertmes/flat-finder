@@ -113,6 +113,7 @@ export class NewFlatComponent {
     const userId = localStorage.getItem('userId');
     const userFullName = localStorage.getItem('userFullName');
     const userEmail = localStorage.getItem('userEmail');
+    const message: any = localStorage.getItem('message');
     if (
       rawForm.city &&
       rawForm.streetNumber &&
@@ -129,6 +130,7 @@ export class NewFlatComponent {
         userId,
         userFullName,
         userEmail,
+        message,
         city: rawForm.city,
         streetNumber: rawForm.streetNumber,
         areaSize: rawForm.areaSize,

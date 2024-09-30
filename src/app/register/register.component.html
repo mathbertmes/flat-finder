@@ -35,23 +35,11 @@
                 </mat-form-field>
             </div>
 
-            <!-- <div class="example-container">
-                <mat-form-field>
-                    <mat-label>Enter your birth date</mat-label>
-                    <input type="date" matInput placeholder="" formControlName="birthDate" min="1904-12-31"
-                        max="2006-01-01" (blur)="updateBirthDateErrorMessage()" required />
-                    @if (birthDate?.invalid) {
-                    <mat-error>{{birthDateErrorMessage()}}</mat-error>
-                    }
-                </mat-form-field>
-            </div> -->
-
             <div class="example-container">
                 <mat-form-field>
                     <mat-label>Choose your birth date</mat-label>
                     <input matInput [matDatepicker]="picker" formControlName="birthDate" min="1904-11-31"
                         max="2006-02-01" (blur)="updateBirthDateErrorMessage()" required>
-                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -89,8 +77,6 @@
 
             <button class="success" [disabled]="!form.valid" type="submit" mat-flat-button>Login</button>
 
-
-            <!-- <button class="success" [disabled]="!form.valid" type="submit">Register</button> -->
         </form>
     </div>
 </div>

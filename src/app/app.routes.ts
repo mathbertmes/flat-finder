@@ -9,7 +9,11 @@ import { MyFlatsComponent } from './my-flats/my-flats.component';
 import { ProfileUpdateComponent } from './profile-update/profile-update.component';
 import { DeleteAccountComponent } from './delete-account/delete-account.component';
 import { AllUsersComponent } from './all-users/all-users.component';
+
 import { FlatViewComponent } from './flat-view/flat-view.component';
+
+import { ShowMessagesComponent } from './show-messages/show-messages.component';
+
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -22,5 +26,6 @@ export const routes: Routes = [
   { path: 'my-flats', component: MyFlatsComponent },
   { path: 'delete-account', component: DeleteAccountComponent },
   { path: 'all-users', component: AllUsersComponent },
+  { path: 'show-messages', component: ShowMessagesComponent },
   { path: '', component: HomeComponent },
 ];

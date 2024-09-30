@@ -6,7 +6,7 @@ import { FirestoreService } from '../firestore.service';
 import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common'; // Import CommonModule for async pipe
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { Sort, MatSortModule } from '@angular/material/sort';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -66,6 +66,10 @@ export class HomeComponent implements OnInit {
   flats$: Flat[] = [];
 
   userFavoritesFlats: string[] = [];
+  userMessages: any;
+
+  storedData: any = localStorage.getItem('user');
+  userData = JSON.parse(this.storedData);
 
   displayedColumns: string[] = [
     'city',
@@ -79,6 +83,7 @@ export class HomeComponent implements OnInit {
     'dataAvailable',
     'favorite',
     'flat-view'
+
   ];
 
   formFilter = new FormGroup({
@@ -143,6 +148,50 @@ export class HomeComponent implements OnInit {
     };
 
     this.firestore.updateUser(userId, updatedUser);
+  }
+
+  handleMessage(flatDocument: string): void {
+    const messageList: {
+      flatDocument: string;
+      userId: string;
+      timestamp: Date;
+      fromUserFirstName: string;
+      fromUserLastName: string;
+      fromUserEmail: string;
+    }[] = this.userMessages || [];
+    const fromUserFirstName = this.userData.firstName;
+    const fromUserLastName = this.userData.lastName;
+    const fromUserEmail = this.userData.email;
+    const userId = this.userData.uid;
+
+    const existingMessageIndex = messageList.findIndex(
+      (message) =>
+        message.flatDocument === flatDocument && message.userId === userId
+    );
+
+    if (existingMessageIndex !== -1) {
+      messageList.splice(existingMessageIndex, 1);
+    } else {
+      const timestamp = new Date();
+      messageList.push({
+        flatDocument,
+        userId,
+        timestamp,
+        fromUserFirstName,
+        fromUserLastName,
+        fromUserEmail,
+      });
+    }
+    this.userMessages = messageList;
+    localStorage.setItem('userMessages', JSON.stringify(messageList));
+
+    const updatedFlat = {
+      message: messageList,
+    };
+
+    this.firestore.updateFlat(flatDocument, updatedFlat);
+    alert('Sent a message to the owner of this property');
+    console.log('working', updatedFlat);
   }
 
   ngOnInit(): void {

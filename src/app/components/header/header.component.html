@@ -35,7 +35,7 @@
 
         <div class="flex" *ngIf="localStorage.getItem('userFullName')">
             <h2 class="userFullName">Hello - {{localStorage.getItem('userFullName')}}</h2>
-            <a (click)="logout()">Logout</a>
+            <a class="logOut" (click)="logout()">Logout</a>
         </div>
     </div>
 </div>

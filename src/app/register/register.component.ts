@@ -62,7 +62,7 @@ export class RegisterComponent {
         Validators.minLength(2),
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      birthDate: new FormControl(new Date(), [
+      birthDate: new FormControl(null, [
         Validators.required,
         this.ageRangeValidator(18, 120),
       ]),
@@ -72,6 +72,8 @@ export class RegisterComponent {
         Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
+      role: new FormControl(''),
+      favorites: new FormControl(''),
     },
     [this.matching('password', 'confirmPassword')]
   );
@@ -144,8 +146,10 @@ export class RegisterComponent {
   onSubmit(): void {
     console.log('onSubmit')
     const rawForm: any = this.form.getRawValue();
+
     if (
       (rawForm.email && rawForm.password && rawForm.firstName,
+
       rawForm.lastName &&
         rawForm.birthDate)
     ) {
@@ -155,10 +159,13 @@ export class RegisterComponent {
           rawForm.firstName!,
           rawForm.lastName!,
           rawForm.birthDate!,
+
         )
         .subscribe(() => {
           this.router.navigateByUrl('/');
         });
+    } else {
+      console.error('Form is invalid or missing values:', rawForm);
     }
   }
 

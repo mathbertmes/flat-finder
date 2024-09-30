@@ -43,7 +43,10 @@ export class AuthService {
         favorites: [],
         deleted: false
       };
-      updateProfile(response.user, { displayName: `${firstName} ${lastName}` });
+      updateProfile(response.user, {
+        displayName: `${firstName} ${lastName}`,
+      });
+
       this.firestoreFunctions.createUser(response.user.uid, newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
       localStorage.setItem('userFavorites', JSON.stringify(newUser.favorites));
