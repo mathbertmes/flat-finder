@@ -13,8 +13,9 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { Flat } from './interfaces/flat.interface';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { User } from './interfaces/user.interface';
+import { Message } from './interfaces/message.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -65,13 +66,53 @@ export class FirestoreService {
     >;
   }
 
+  getFlat(id: string): Observable<Flat | undefined> {
+    const flatDocRef = doc(this.firestore, 'flats', id); // Referência ao documento com o ID
+
+    // Converte a Promise do `getDoc` para um Observable com `from`
+    return from(
+      getDoc(flatDocRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          return { id: snapshot.id, ...snapshot.data() } as Flat;
+        } else {
+          return undefined; 
+        }
+      })
+    );
+  }
+
   async updateUser(userId: string, updatedData: Partial<User>): Promise<void> {
     const userDocRef = doc(this.firestore, 'users', userId);
     await updateDoc(userDocRef, updatedData);
   }
 
+  
+
   deleteUserData(userId: string): Promise<void> {
     const userDocRef = doc(this.firestore, 'users', userId);
     return deleteDoc(userDocRef);
+  }
+
+  //MESSAGES
+
+  async createMessage(message: Message): Promise<void> {
+    const messagesCollection = collection(this.firestore, 'messages');
+    await addDoc(messagesCollection, message);
+  }
+
+  getFlatMessages(flatId: string): Observable<Message[]> {
+    const messageCollection = collection(this.firestore, 'messages');
+    const messagesQuery = query(messageCollection, where("flatId", '==', flatId));
+    return collectionData(messagesQuery, { idField: 'id' }) as Observable<
+    Message[]
+    >;
+  }
+
+  getFlatMessagesByUser(flatId: string, userId: string): Observable<Message[]> {
+    const messageCollection = collection(this.firestore, 'messages');
+    const messagesQuery = query(messageCollection, where("flatId", '==', flatId), where("userId", '==', userId));
+    return collectionData(messagesQuery, { idField: 'id' }) as Observable<
+    Message[]
+    >;
   }
 }
