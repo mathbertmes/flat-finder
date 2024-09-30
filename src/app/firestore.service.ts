@@ -13,8 +13,13 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { Flat } from './interfaces/flat.interface';
+
+import { from, Observable } from 'rxjs';
+
 import { map, Observable } from 'rxjs';
+
 import { User } from './interfaces/user.interface';
+import { Message } from './interfaces/message.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -41,9 +46,9 @@ export class FirestoreService {
   }
 
   getAllUsers(): Observable<User[]> {
-    const flatsCollection = collection(this.firestore, 'users');
-    const userTasksQuery = query(flatsCollection);
-    return collectionData(userTasksQuery, { idField: 'id' }) as Observable<
+    const usersCollection = collection(this.firestore, 'users');
+    const usersQuery = query(usersCollection, where('deleted', '==', false));
+    return collectionData(usersQuery, { idField: 'id' }) as Observable<
       User[]
     >;
   }
@@ -65,29 +70,18 @@ export class FirestoreService {
     >;
   }
 
-  //READ ONE FLATS
-  getFlat(flatId: string): Observable<Flat[]> {
-    const flatsCollection = collection(this.firestore, 'flats');
-    const userQuery = query(flatsCollection);
 
-    return collectionData(userQuery, { idField: 'id' }).pipe(
-      map((flats: Flat[]) => {
-        // 取得したフラットデータをログに表示して確認
-        console.log('Flats from Firestore:', flats);
+  getFlat(id: string): Observable<Flat | undefined> {
+    const flatDocRef = doc(this.firestore, 'flats', id);
 
-        // 各フラットの message フィールドが存在するか確認し、さらに message が配列かどうかを確認
-        return flats.filter((flat) => {
-          if (!flat.message || !Array.isArray(flat.message)) {
-            console.warn(
-              `Flat document ${flat.userId} does not have a valid message field.`,
-              flat
-            );
-            return false;
-          }
-
-          // message 配列内の要素が flatId と一致するかどうかを確認
-          return flat.message.some((msg) => msg.flatDocument === flatId);
-        });
+    
+    return from(
+      getDoc(flatDocRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          return { id: snapshot.id, ...snapshot.data() } as Flat;
+        } else {
+          return undefined; 
+        }
       })
     );
   }
@@ -97,8 +91,39 @@ export class FirestoreService {
     await updateDoc(userDocRef, updatedData);
   }
 
+
+  
+
+  deleteUserData(userId: string): Promise<void> {
+    const userDocRef = doc(this.firestore, 'users', userId);
+    return deleteDoc(userDocRef);
+  }
+
+  //MESSAGES
+
+  async createMessage(message: Message): Promise<void> {
+    const messagesCollection = collection(this.firestore, 'messages');
+    await addDoc(messagesCollection, message);
+  }
+
+  getFlatMessages(flatId: string): Observable<Message[]> {
+    const messageCollection = collection(this.firestore, 'messages');
+    const messagesQuery = query(messageCollection, where("flatId", '==', flatId));
+    return collectionData(messagesQuery, { idField: 'id' }) as Observable<
+    Message[]
+    >;
+  }
+
+  getFlatMessagesByUser(flatId: string, userId: string): Observable<Message[]> {
+    const messageCollection = collection(this.firestore, 'messages');
+    const messagesQuery = query(messageCollection, where("flatId", '==', flatId), where("userId", '==', userId));
+    return collectionData(messagesQuery, { idField: 'id' }) as Observable<
+    Message[]
+    >;
+
   async updateFlat(userId: string, updatedData: Partial<Flat>): Promise<void> {
     const userDocRef = doc(this.firestore, 'flats', userId);
     await updateDoc(userDocRef, updatedData);
+
   }
 }

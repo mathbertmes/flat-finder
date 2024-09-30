@@ -26,9 +26,8 @@ export class AuthService {
     firstName: string,
     lastName: string,
     birthDate: Date,
-    role: any,
-    favorites: any
   ): Observable<void> {
+    console.log(email, password, firstName, lastName)
     const promise = createUserWithEmailAndPassword(
       this.firebaseAuth,
       email,
@@ -42,6 +41,7 @@ export class AuthService {
         birthDate,
         role: 'user',
         favorites: [],
+        deleted: false
       };
       updateProfile(response.user, {
         displayName: `${firstName} ${lastName}`,
@@ -52,6 +52,7 @@ export class AuthService {
       localStorage.setItem('userFavorites', JSON.stringify(newUser.favorites));
       localStorage.setItem('userFullName', `${firstName} ${lastName}`);
       localStorage.setItem('userEmail', email);
+      localStorage.setItem('userRole', newUser.role)
       localStorage.setItem('userId', response.user.uid);
     });
     return from(promise);
@@ -63,18 +64,27 @@ export class AuthService {
       email,
       password
     ).then((response) => {
+      console.log(response.user);
       this.firestoreFunctions.getUser(response.user.uid).subscribe((user) => {
         if (user.length) {
-          localStorage.setItem('user', JSON.stringify(user[0]));
-          localStorage.setItem(
+          if(user[0].deleted){
+            alert("This user is banned")
+            this.logout()
+          }else{
+            localStorage.setItem('user', JSON.stringify(user[0]));
+            localStorage.setItem(
             'userFavorites',
             JSON.stringify(user[0].favorites)
           );
+          localStorage.setItem('userRole', user[0].role)
+          localStorage.setItem('userFullName', response.user.displayName!);
+          localStorage.setItem('userEmail', response.user.email!);
+          localStorage.setItem('userId', response.user.uid);
+          }
+          
         }
       });
-      localStorage.setItem('userFullName', response.user.displayName!);
-      localStorage.setItem('userEmail', response.user.email!);
-      localStorage.setItem('userId', response.user.uid);
+
     });
     return from(promise);
   }
@@ -86,6 +96,7 @@ export class AuthService {
     localStorage.removeItem('userId');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('user');
+    localStorage.removeItem('userRole')
     return from(promise);
   }
 

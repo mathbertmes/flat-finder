@@ -1,96 +1,117 @@
 <p>(shown only to admin)</p>
 <div>
-    <form [formGroup]="formFilter" (ngSubmit)="onFilter()" class="flex gap-2">
-        <mat-form-field class="example-full-width">
-            <mat-label>User Type</mat-label>
-            <input matInput placeholder="City" formControlName="firstName">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-            <mat-label>Min age</mat-label>
-            <input type="number" matInput placeholder="" formControlName="minAge">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-            <mat-label>Max age</mat-label>
-            <input type="number" matInput placeholder="" formControlName="maxAge">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-            <mat-label>Min Flats Counter</mat-label>
-            <input type="number" matInput placeholder="" formControlName="minFlatsCounter">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-            <mat-label>Max Flats Counter</mat-label>
-            <input type="number" matInput placeholder="" formControlName="maxFlatsCounter">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-            <mat-label>Is Admin</mat-label>
-            <input type="boolean" matInput placeholder="" formControlName="IsAdmin">
-        </mat-form-field>
+  <form [formGroup]="formFilter" (ngSubmit)="onFilter()" class="flex gap-2">
+    <mat-form-field class="example-full-width">
+      <mat-label>User Type</mat-label>
+      <input matInput placeholder="City" formControlName="firstName" />
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Min age</mat-label>
+      <input type="number" matInput placeholder="" formControlName="minAge" />
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Max age</mat-label>
+      <input type="number" matInput placeholder="" formControlName="maxAge" />
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Min Flats Counter</mat-label>
+      <input
+        type="number"
+        matInput
+        placeholder=""
+        formControlName="minFlatsCounter"
+      />
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Max Flats Counter</mat-label>
+      <input
+        type="number"
+        matInput
+        placeholder=""
+        formControlName="maxFlatsCounter"
+      />
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Is Admin</mat-label>
+      <input type="boolean" matInput placeholder="" formControlName="IsAdmin" />
+    </mat-form-field>
 
-
-        <button class="success" type="submit" mat-flat-button>Filter</button>
-    </form>
+    <button class="success" type="submit" mat-flat-button>Filter</button>
+  </form>
 </div>
-<table matSort mat-table [dataSource]="users$ ">
+<table matSort mat-table [dataSource]="users$">
+  <!-- City Column -->
+  <ng-container matColumnDef="firstName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.firstName }}</td>
+  </ng-container>
 
-    <!-- City Column -->
-    <ng-container matColumnDef="firstName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
-    </ng-container>
+  <!-- Owner Name Column -->
+  <ng-container matColumnDef="lastName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
+  </ng-container>
 
-    <!-- Owner Name Column -->
-    <ng-container matColumnDef="lastName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
-    </ng-container>
+  <!-- Owner Email Column -->
+  <ng-container matColumnDef="userEmail">
+    <th mat-header-cell *matHeaderCellDef>Email</th>
+    <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+  </ng-container>
 
-    <!-- Owner Email Column -->
-    <ng-container matColumnDef="userEmail">
-        <th mat-header-cell *matHeaderCellDef> Email </th>
-        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-    </ng-container>
+  <!-- Street Number Column -->
+  <ng-container matColumnDef="birthDate">
+    <th mat-header-cell *matHeaderCellDef>Birth Date</th>
+    <td mat-cell *matCellDef="let element">{{ element.birthDate }}</td>
+  </ng-container>
 
-    <!-- Street Number Column -->
-    <ng-container matColumnDef="birthDate">
-        <th mat-header-cell *matHeaderCellDef> Birth Date </th>
-        <td mat-cell *matCellDef="let element"> {{element.birthDate}} </td>
-    </ng-container>
+  <ng-container matColumnDef="flatsCounter">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Flats Counter</th>
+    <td mat-cell *matCellDef="let element">0</td>
+  </ng-container>
 
-    <ng-container matColumnDef="flatsCounter">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Flats Counter </th>
-        <td mat-cell *matCellDef="let element"> 0 </td>
-    </ng-container>
+  <ng-container matColumnDef="IsAdmin">
+    <th mat-header-cell *matHeaderCellDef>Role</th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngIf="element.role === 'admin'; else isNotAdmin">
+        Admin
+      </ng-container>
+      <ng-template #isNotAdmin> User </ng-template>
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="IsAdmin">
-        <th mat-header-cell *matHeaderCellDef> Is Admin </th>
-        <td mat-cell *matCellDef="let element"> - </td>
-    </ng-container>
+  <ng-container matColumnDef="operation">
+    <th mat-header-cell *matHeaderCellDef>Operation</th>
+    <td mat-cell *matCellDef="let element">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        aria-label="Example icon-button with a menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="goToProfile(element.uid)">
+          <span>Open user profile</span>
+        </button>
+        
+        <!-- Verificação da role para mostrar Olá ou Oi -->
+        <button mat-menu-item>
+          <ng-container  *ngIf="element.role === 'admin'; else isNotAdmin">
+            <button (click)="handleUserRoleChange(element.uid, element.role)">Remove admin role</button>
+          </ng-container>
+          <ng-template #isNotAdmin>
+            <button (click)="handleUserRoleChange(element.uid, element.role)">Give admin role</button>
+          </ng-template>
+        </button>
+        
+        <button mat-menu-item (click)="handleRemoveUser(element.uid)">
+          <span class="text-red">Remove user</span>
+        </button>
+      </mat-menu>
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="operation">
-        <th mat-header-cell *matHeaderCellDef> Operation </th>
-        <td mat-cell *matCellDef=""> <button mat-icon-button [matMenuTriggerFor]="menu"
-                aria-label="Example icon-button with a menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="fn1()">
-                    <span>Open user profile</span>
-                </button>
-                <button mat-menu-item (click)="fn2()">
-                    <span>Grant admin permissions</span>
-                </button>
-                <button mat-menu-item (click)="fn3()">
-                    <span class="text-red">Remove user</span>
-                </button>
-            </mat-menu>
-        </td>
-    </ng-container>
-
-
-    <!-- Header and Row Declarations -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-
-
+  <!-- Header and Row Declarations -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>

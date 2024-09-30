@@ -14,6 +14,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { User } from '../interfaces/user.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-users',
@@ -38,8 +39,10 @@ import { User } from '../interfaces/user.interface';
 export class AllUsersComponent implements OnInit {
   firestore = inject(FirestoreService);
 
+  constructor(private router: Router){}
+
   // Ensure the observable won't emit null values, falling back to an empty array
-  users$: any = [];
+  users$: User[] = [];
 
   displayedColumns: string[] = [
     'firstName',
@@ -99,7 +102,31 @@ export class AllUsersComponent implements OnInit {
     });
   }
 
+  handleUserRoleChange(userId: string, role: string){
+    const updatedUser = {
+      role: role === 'admin' ? 'user' : 'admin',
+    };
+
+    this.firestore.updateUser(userId, updatedUser);
+  }
+
+  handleRemoveUser(userId: string){
+    const updatedUser = {
+      deleted: true,
+    };
+
+    this.firestore.updateUser(userId, updatedUser);
+  }
+
+  goToProfile(userId: string) {
+    this.router.navigate(['/profile', userId]);
+  }
+
   ngOnInit(): void {
+    if(localStorage.getItem("userRole") !== "admin"){
+      window.location.replace("/")
+      return 
+    }
     this.firestore.getAllUsers().subscribe((users) => {
       if (users) {
         this.users$ = users;

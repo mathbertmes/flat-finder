@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { User } from '../interfaces/user.interface';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 const STAR_FILL_ICON = `
   <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="m243-144 63-266L96-589l276-24 108-251 108 252 276 23-210 179 63 266-237-141-237 141Z"/></svg>
@@ -44,7 +45,7 @@ const STAR_ICON = `
 export class HomeComponent implements OnInit {
   firestore = inject(FirestoreService);
 
-  constructor() {
+  constructor(private router: Router) {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
@@ -81,7 +82,8 @@ export class HomeComponent implements OnInit {
     'rentPrice',
     'dataAvailable',
     'favorite',
-    'message',
+    'flat-view'
+
   ];
 
   formFilter = new FormGroup({
@@ -91,6 +93,10 @@ export class HomeComponent implements OnInit {
     minArea: new FormControl(0),
     maxArea: new FormControl(0),
   });
+
+  openFlatViewPage(flatId: string){
+    this.router.navigate(['/flat-view', flatId]);
+  }
 
   onFilter() {
     let allFlats: Flat[] = [];

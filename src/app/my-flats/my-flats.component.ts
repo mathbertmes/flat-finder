@@ -11,6 +11,7 @@ import { FirestoreService } from '../firestore.service';
 import { Flat } from '../interfaces/flat.interface';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-my-flats',
   standalone: true,
@@ -32,6 +33,8 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 export class MyFlatsComponent implements OnInit {
   firestore = inject(FirestoreService);
+
+  constructor(private router: Router){}
 
   // Ensure the observable won't emit null values, falling back to an empty array
   flats$: Flat[] = [];
@@ -70,13 +73,16 @@ export class MyFlatsComponent implements OnInit {
     this.firestore.updateUser(userId, updatedUser);
   }
 
+  openFlatViewPage(flatId: string){
+    this.router.navigate(['/flat-view', flatId]);
+  }
+
   storedData: any = localStorage.getItem('user');
   userData = JSON.parse(this.storedData);
 
   ngOnInit(): void {
     const userFavorites = JSON.parse(localStorage.getItem('userFavorites')!);
     this.userFavoritesFlats = userFavorites;
-    console.log(this.userFavoritesFlats);
 
     const userId = this.userData.uid;
     this.firestore.getUserFlats(userId).subscribe((flats) => {

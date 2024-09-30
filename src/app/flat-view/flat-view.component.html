@@ -1,29 +1,4 @@
-<div>
-  <form [formGroup]="formFilter" (ngSubmit)="onFilter()" class="flex gap-2">
-    <mat-form-field class="example-full-width">
-      <mat-label>City</mat-label>
-      <input matInput placeholder="City" formControlName="city">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Min price</mat-label>
-      <input type="number" matInput placeholder="" formControlName="minPrice">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Max price</mat-label>
-      <input type="number" matInput placeholder="" formControlName="maxPrice">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Min area</mat-label>
-      <input type="number" matInput placeholder="" formControlName="minArea">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Max area</mat-label>
-      <input type="number" matInput placeholder="" formControlName="maxArea">
-    </mat-form-field>
-    <button class="success" type="submit" mat-flat-button>Filter</button>
-  </form>
-</div>
-<table matSort mat-table [dataSource]="flats$ ">
+<table matSort  mat-table [dataSource]="flat" >
 
   <!-- City Column -->
   <ng-container matColumnDef="city">
@@ -81,40 +56,63 @@
 
   <ng-container matColumnDef="favorite">
     <th mat-header-cell *matHeaderCellDef> Favorite </th>
-    <td mat-cell *matCellDef="let element">
+    <td mat-cell *matCellDef="let element"> 
       <ng-container *ngIf="userFavoritesFlats.includes(element.id); else showImageB">
-        <mat-icon (click)="handleFavorite(element.id)" svgIcon="star_fill_icon" aria-hidden="false"
-          aria-label="Example thumbs up SVG icon"></mat-icon>
+        <mat-icon (click)="handleFavorite(element.id)" svgIcon="star_fill_icon" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
       </ng-container>
       <ng-template #showImageB>
-        <mat-icon (click)="handleFavorite(element.id)" svgIcon="star_icon" aria-hidden="false"
-          aria-label="Example thumbs up SVG icon"></mat-icon>
+        <mat-icon (click)="handleFavorite(element.id)" svgIcon="star_icon" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
       </ng-template>
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="message">
-    <th mat-header-cell *matHeaderCellDef> Message </th>
-    <td mat-cell *matCellDef="let element">
-      <ng-container *ngIf="userData?.uid === element.userId; else showSend">
-        <a href="show-messages"><span>Show</span></a>
-      </ng-container>
-      <ng-template #showSend>
-        <span class="send" (click)="handleMessage(element.id)">Send</span>
-      </ng-template>
-    </td>
-  </ng-container>
 
-  <ng-container matColumnDef="flat-view">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let element"><button  mat-flat-button (click)="openFlatViewPage(element.id)">Flat View</button>
-    </td>
-</ng-container>
 
   <!-- Header and Row Declarations -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
+  
 
+</table>
+
+
+<div>
+  <form [formGroup]="formMessage" (ngSubmit)="onSubmitMessage()" class="flex gap-2">
+    <mat-form-field class="example-full-width">
+      <mat-label>Message</mat-label>
+      <input matInput placeholder="Message" formControlName="message">
+    </mat-form-field>
+    <button class="success" [disabled]="!formMessage.valid" type="submit" mat-flat-button>Send</button>
+  </form>
+</div>
+
+<table matSort  mat-table [dataSource]="flatMessages" >
+
+  <!-- City Column -->
+  <ng-container matColumnDef="messageContent">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Message </th>
+    <td mat-cell *matCellDef="let element"> {{element.content}} </td>
+  </ng-container>
+
+  <!-- Owner Name Column -->
+  <ng-container matColumnDef="userFullName">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.userFullName}} </td>
+  </ng-container>
+
+  <!-- Owner Email Column -->
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef> Date </th>
+    <td mat-cell *matCellDef="let element"> {{element.createdAt}} </td>
+  </ng-container>
+
+
+
+  <!-- Header and Row Declarations -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumnsMessage"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumnsMessage;"></tr>
+
+  
 
 </table>

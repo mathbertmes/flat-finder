@@ -18,12 +18,12 @@
             <h1>Flat Finder</h1>
         </div>
 
-        <div class="flex menuItems">
+        <div *ngIf="localStorage.getItem('user')" class="flex menuItems">
             <a routerLink="/">Home</a>
             <a routerLink="/profile">My Profile</a>
             <a routerLink="/my-flats">My Flats</a>
             <a routerLink="/favorites">Favorites</a>
-            <a routerLink="/all-users">All Users</a>
+            <a *ngIf="localStorage.getItem('userRole') == 'admin'" routerLink="/all-users">All Users</a>
             <a routerLink="/delete-account">Delete Account</a>
         </div>
     </div>

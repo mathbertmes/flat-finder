@@ -6,4 +6,5 @@ export interface User{
   birthDate: Date;
   role: string;
   favorites: string[];
+  deleted: boolean;
 }
