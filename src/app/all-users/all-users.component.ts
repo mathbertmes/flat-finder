@@ -119,7 +119,7 @@ export class AllUsersComponent implements OnInit {
   }
 
   goToProfile(userId: string) {
-    this.router.navigate(['/profile', userId]); // Navega para a rota com o `id` do usuário
+    this.router.navigate(['/profile', userId]);
   }
 
   ngOnInit(): void {
