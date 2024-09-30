@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ProfileUpdateComponent } from '../profile-update/profile-update.component';
 import { log } from 'console';
 import { User } from '../interfaces/user.interface';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -37,7 +38,9 @@ export class ProfileComponent implements OnInit {
   firestore = inject(FirestoreService);
 
   // Ensure the observable won't emit null values, falling back to an empty array
-  users$: User[] = [];
+  users$: User[] = []
+  userId: string | null = null; 
+  
 
   displayedColumns: string[] = [
     'firstName',
@@ -47,18 +50,32 @@ export class ProfileComponent implements OnInit {
     'edit',
   ];
 
-  storedData: any = localStorage.getItem('user')!;
-  userData = JSON.parse(this.storedData);
+
+
+  constructor(private route: ActivatedRoute,
+    private firestoreService: FirestoreService ){
+
+  }
 
   ngOnInit(): void {
-    const userId = this.userData.uid;
-    this.firestore.getUser(userId).subscribe((users) => {
-      if (users) {
-        this.users$ = users;
-      } else {
-        this.users$ = [];
+    this.route.paramMap.subscribe(params => {
+      this.userId = params.get('id'); // Pega o valor do parâmetro `id`
+      console.log(this.userId )
+      if (this.userId) {
+        // Usa o `id` para buscar os dados do usuário
+        this.firestoreService.getUser(this.userId).subscribe(user => {
+          console.log(user)
+          this.users$ = user;
+        })
       }
     });
+    // this.firestore.getUser(userId).subscribe((users) => {
+    //   if (users) {
+    //     this.users$ = users;
+    //   } else {
+    //     this.users$ = [];
+    //   }
+    // });
   }
 
   showComponent = false;
