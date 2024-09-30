@@ -1,0 +1,118 @@
+<table matSort  mat-table [dataSource]="flat" >
+
+  <!-- City Column -->
+  <ng-container matColumnDef="city">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+    <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+  </ng-container>
+
+  <!-- Owner Name Column -->
+  <ng-container matColumnDef="userFullName">
+    <th mat-header-cell *matHeaderCellDef> Owner Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.userFullName}} </td>
+  </ng-container>
+
+  <!-- Owner Email Column -->
+  <ng-container matColumnDef="userEmail">
+    <th mat-header-cell *matHeaderCellDef> Owner Email </th>
+    <td mat-cell *matCellDef="let element"> {{element.userEmail}} </td>
+  </ng-container>
+
+  <!-- Street Number Column -->
+  <ng-container matColumnDef="streetNumber">
+    <th mat-header-cell *matHeaderCellDef> Street N </th>
+    <td mat-cell *matCellDef="let element"> {{element.streetNumber}} </td>
+  </ng-container>
+
+  <!-- Area Size Column -->
+  <ng-container matColumnDef="areaSize">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Area Size </th>
+    <td mat-cell *matCellDef="let element"> {{element.areaSize}} </td>
+  </ng-container>
+
+  <!-- AC Column -->
+  <ng-container matColumnDef="hasAc">
+    <th mat-header-cell *matHeaderCellDef> AC </th>
+    <td mat-cell *matCellDef="let element"> {{element.hasAc}} </td>
+  </ng-container>
+
+  <!-- Year Build Column -->
+  <ng-container matColumnDef="yearBuild">
+    <th mat-header-cell *matHeaderCellDef> Year Build </th>
+    <td mat-cell *matCellDef="let element"> {{element.yearBuild}} </td>
+  </ng-container>
+
+  <!-- Rent Price Column -->
+  <ng-container matColumnDef="rentPrice">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Rent Price </th>
+    <td mat-cell *matCellDef="let element"> {{element.rentPrice}} </td>
+  </ng-container>
+
+  <!-- Data Available Column -->
+  <ng-container matColumnDef="dataAvailable">
+    <th mat-header-cell *matHeaderCellDef> Data Available </th>
+    <td mat-cell *matCellDef="let element"> {{element.dataAvailable}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="favorite">
+    <th mat-header-cell *matHeaderCellDef> Favorite </th>
+    <td mat-cell *matCellDef="let element"> 
+      <ng-container *ngIf="userFavoritesFlats.includes(element.id); else showImageB">
+        <mat-icon (click)="handleFavorite(element.id)" svgIcon="star_fill_icon" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
+      </ng-container>
+      <ng-template #showImageB>
+        <mat-icon (click)="handleFavorite(element.id)" svgIcon="star_icon" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
+      </ng-template>
+    </td>
+  </ng-container>
+
+
+
+  <!-- Header and Row Declarations -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  
+
+</table>
+
+
+<div>
+  <form [formGroup]="formMessage" (ngSubmit)="onSubmitMessage()" class="flex gap-2">
+    <mat-form-field class="example-full-width">
+      <mat-label>Message</mat-label>
+      <input matInput placeholder="Message" formControlName="message">
+    </mat-form-field>
+    <button class="success" [disabled]="!formMessage.valid" type="submit" mat-flat-button>Send</button>
+  </form>
+</div>
+
+<table matSort  mat-table [dataSource]="flatMessages" >
+
+  <!-- City Column -->
+  <ng-container matColumnDef="messageContent">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Message </th>
+    <td mat-cell *matCellDef="let element"> {{element.content}} </td>
+  </ng-container>
+
+  <!-- Owner Name Column -->
+  <ng-container matColumnDef="userFullName">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.userFullName}} </td>
+  </ng-container>
+
+  <!-- Owner Email Column -->
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef> Date </th>
+    <td mat-cell *matCellDef="let element"> {{element.createdAt}} </td>
+  </ng-container>
+
+
+
+  <!-- Header and Row Declarations -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumnsMessage"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumnsMessage;"></tr>
+
+  
+
+</table>
