@@ -20,7 +20,7 @@
 
         <div *ngIf="localStorage.getItem('user')" class="flex menuItems">
             <a routerLink="/">Home</a>
-            <a routerLink="/profile">My Profile</a>
+            <a [routerLink]="['/profile', localStorage.getItem('userId')]">My Profile</a>
             <a routerLink="/my-flats">My Flats</a>
             <a routerLink="/favorites">Favorites</a>
             <a *ngIf="localStorage.getItem('userRole') == 'admin'" routerLink="/all-users">All Users</a>
