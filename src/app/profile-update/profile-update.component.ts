@@ -18,7 +18,7 @@ import {
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -53,15 +53,18 @@ export class ProfileUpdateComponent implements OnInit {
   http = inject(HttpClient);
   router = inject(Router);
   authService = inject(AuthService);
-
-  userdata = [];
+  userId: string | null = null
+  user = [];
 
   storedData: any = localStorage.getItem('user')!;
   userData = JSON.parse(this.storedData);
 
+
   ngOnInit(): void {
     let user = JSON.parse(localStorage.getItem('user')!);
-    this.userdata = user[0];
+
+    this.route.paramMap.subscribe(params => {
+      this.userId = params.get('id');})
   }
 
   form = new FormGroup(
@@ -189,7 +192,7 @@ export class ProfileUpdateComponent implements OnInit {
   passwordErrorMessage = signal('');
   confirmPasswordErrorMessage = signal('');
 
-  constructor() {
+  constructor(private route: ActivatedRoute) {
     merge(this.email!.statusChanges, this.email!.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateEmailErrorMessage());
