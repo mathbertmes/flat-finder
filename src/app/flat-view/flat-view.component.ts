@@ -43,6 +43,7 @@ export class FlatViewComponent implements OnInit{
   flatId: string | null = null
   flat: Flat[] = [];
   flatMessages: Message[] = [];
+  flatOwner: string = ''
   userFavoritesFlats: string[] = [];
   firestore = inject(FirestoreService);
   user: User | null = JSON.parse(localStorage.getItem('user')!);
@@ -134,6 +135,7 @@ export class FlatViewComponent implements OnInit{
 
         this.firestoreService.getFlat(this.flatId).subscribe(flat => {
           if(flat){
+            this.flatOwner = flat.userId
             this.flat = [flat];
             if(this.user?.uid === flat.userId){
               this.firestoreService.getFlatMessages(this.flatId!).subscribe(messages => {
