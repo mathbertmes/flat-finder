@@ -62,9 +62,7 @@ export class LoginComponent {
   onSubmit(): void {
     const rawForm = this.form.getRawValue();
     if (rawForm.email && rawForm.password) {
-      this.authService.login(rawForm.email, rawForm.password).subscribe(() => {
-        this.router.navigateByUrl('/');
-      });
+      this.authService.login(rawForm.email, rawForm.password);
     }
   }
 
