@@ -90,21 +90,21 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="goToProfile(element.uid)">
+        <button mat-menu-item (click)="goToProfile(element.id)">
           <span>Open user profile</span>
         </button>
         
         <!-- Verificação da role para mostrar Olá ou Oi -->
         <button mat-menu-item>
           <ng-container  *ngIf="element.role === 'admin'; else isNotAdmin">
-            <button (click)="handleUserRoleChange(element.uid, element.role)">Remove admin role</button>
+            <button (click)="handleUserRoleChange(element.id, element.role)">Remove admin role</button>
           </ng-container>
           <ng-template #isNotAdmin>
-            <button (click)="handleUserRoleChange(element.uid, element.role)">Give admin role</button>
+            <button (click)="handleUserRoleChange(element.id, element.role)">Give admin role</button>
           </ng-template>
         </button>
         
-        <button mat-menu-item (click)="handleRemoveUser(element.uid)">
+        <button mat-menu-item (click)="handleRemoveUser(element.id)">
           <span class="text-red">Remove user</span>
         </button>
       </mat-menu>
