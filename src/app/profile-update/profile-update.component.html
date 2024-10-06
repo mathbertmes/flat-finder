@@ -1,83 +1,84 @@
-<div class="container">
-    <div class="formWrapper">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+<div *ngIf="(user$ | async) as currentUser; else coisaB">
+    <div *ngIf="currentUser">{{currentUser.firstName}}</div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-            <div class="example-container">
-                <mat-form-field>
-                    <mat-label>Enter your first name</mat-label>
-                    <input matInput placeholder="First Name" formControlName="firstName"
-                        (blur)="updateFirstNameErrorMessage()" required />
-                    @if (firstName?.invalid) {
-                    <mat-error>{{firstNameErrorMessage()}}</mat-error>
-                    }
-                </mat-form-field>
-            </div>
+        <div class="example-container">
+            <mat-form-field>
+                <mat-label>Enter your first name</mat-label>
+                <input matInput placeholder="First Name" formControlName="firstName"
+                    (blur)="updateFirstNameErrorMessage()" required />
+                @if (firstName?.invalid) {
+                <mat-error>{{firstNameErrorMessage()}}</mat-error>
+                }
+            </mat-form-field>
+        </div>
 
-            <div class="example-container">
-                <mat-form-field>
-                    <mat-label>Enter your last name</mat-label>
-                    <input matInput placeholder="Last Name" formControlName="lastName"
-                        (blur)="updateLastNameErrorMessage()" required />
-                    @if (lastName?.invalid) {
-                    <mat-error>{{lastNameErrorMessage()}}</mat-error>
-                    }
-                </mat-form-field>
-            </div>
+        <div class="example-container">
+            <mat-form-field>
+                <mat-label>Enter your last name</mat-label>
+                <input matInput placeholder="Last Name" formControlName="lastName"
+                    (blur)="updateLastNameErrorMessage()" required />
+                @if (lastName?.invalid) {
+                <mat-error>{{lastNameErrorMessage()}}</mat-error>
+                }
+            </mat-form-field>
+        </div>
 
-            <div class="example-container">
-                <mat-form-field>
-                    <mat-label>Enter your email</mat-label>
-                    <input matInput placeholder="pat@example.com" formControlName="email"
-                        (blur)="updateEmailErrorMessage()" required />
-                    @if (email?.invalid) {
-                    <mat-error>{{emailErrorMessage()}}</mat-error>
-                    }
-                </mat-form-field>
-            </div>
+        <div class="example-container">
+            <mat-form-field>
+                <mat-label>Enter your email</mat-label>
+                <input matInput placeholder="pat@example.com" formControlName="email"
+                    (blur)="updateEmailErrorMessage()" required />
+                @if (email?.invalid) {
+                <mat-error>{{emailErrorMessage()}}</mat-error>
+                }
+            </mat-form-field>
+        </div>
 
-            <div class="example-container">
-                <mat-form-field>
-                    <mat-label>Choose your birth date</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="birthDate" min="1904-11-31"
-                        max="2006-02-01" (blur)="updateBirthDateErrorMessage()" required>
-                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-            </div>
+        <div class="example-container">
+            <mat-form-field>
+                <mat-label>Choose your birth date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="birthDate" min="1904-11-31"
+                    max="2006-02-01" (blur)="updateBirthDateErrorMessage()" required>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
 
-            <div class="example-container">
-                <mat-form-field>
-                    <mat-label>Enter your password</mat-label>
-                    <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password"
-                        (blur)="updatePasswordErrorMessage()" required />
-                    @if (password?.invalid) {
-                    <mat-error>{{passwordErrorMessage()}}</mat-error>
-                    }
-                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
-                        [attr.aria-pressed]="hide()">
-                        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-            </div>
+        <div class="example-container">
+            <mat-form-field>
+                <mat-label>Enter your password</mat-label>
+                <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password"
+                    (blur)="updatePasswordErrorMessage()" required />
+                @if (password?.invalid) {
+                <mat-error>{{passwordErrorMessage()}}</mat-error>
+                }
+                <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide()">
+                    <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
 
-            <div class="example-container">
-                <mat-form-field>
-                    <mat-label>Confirm your password</mat-label>
-                    <input matInput [type]="hide() ? 'password' : 'text'" formControlName="confirmPassword"
-                        (blur)="updateConfirmPasswordErrorMessage()" required />
-                    @if (confirmPassword?.invalid) {
-                    <mat-error>{{confirmPasswordErrorMessage()}}</mat-error>
-                    }
-                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
-                        [attr.aria-pressed]="hide()">
-                        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-            </div>
+        <div class="example-container">
+            <mat-form-field>
+                <mat-label>Confirm your password</mat-label>
+                <input matInput [type]="hide() ? 'password' : 'text'" formControlName="confirmPassword"
+                    (blur)="updateConfirmPasswordErrorMessage()" required />
+                @if (confirmPassword?.invalid) {
+                <mat-error>{{confirmPasswordErrorMessage()}}</mat-error>
+                }
+                <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide()">
+                    <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
 
-            <button class="success" [disabled]="!form.valid" type="submit" mat-flat-button>Update</button>
+        <button class="success" [disabled]="!form.valid" type="submit" mat-flat-button>Login</button>
 
-        </form>
-    </div>
-</div>
+    </form>
+  </div>
+  <ng-template #coisaB>Coisa B</ng-template>
+  
+
