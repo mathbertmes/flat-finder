@@ -17,8 +17,8 @@ import { FlatViewComponent } from './flat-view/flat-view.component';
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'profile-update', component: ProfileUpdateComponent },
   { path: 'profile/:id', component: ProfileComponent },
+  { path: 'profile-update/:id', component: ProfileUpdateComponent },
   { path: 'flat-view/:id', component: FlatViewComponent },
   { path: 'new-flat', component: NewFlatComponent },
   { path: 'favorites', component: FavoritesComponent },
