@@ -26,7 +26,7 @@
 
     <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element"><button *ngIf="localStorage.getItem('userRole') == 'admin' || localStorage.getItem('userId') == element.uid" mat-flat-button (click)="toggleComponent()">Edit</button>
+        <td mat-cell *matCellDef="let element"><button *ngIf="localStorage.getItem('userRole') == 'admin' || localStorage.getItem('userId') == element.id" mat-flat-button (click)="handleEditProfile()">Edit</button>
         </td>
     </ng-container>
 
@@ -35,7 +35,3 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
 </table>
-
-<div class="container">
-    <app-profile-update *ngIf="showComponent"></app-profile-update>
-</div>
