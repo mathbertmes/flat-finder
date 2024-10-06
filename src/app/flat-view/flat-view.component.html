@@ -83,7 +83,7 @@
   <div>
     <h1 class="text-3xl mb-5 font-semibold">Messages</h1>
     <div>
-      <form [formGroup]="formMessage" *ngIf="user?.uid != flatOwner" (ngSubmit)="onSubmitMessage()" class="flex gap-2">
+      <form [formGroup]="formMessage" *ngIf="user?.id != flatOwner" (ngSubmit)="onSubmitMessage()" class="flex gap-2">
         <mat-form-field class="example-full-width">
           <mat-label>Message</mat-label>
           <input matInput placeholder="Message" formControlName="message">

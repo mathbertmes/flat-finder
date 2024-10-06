@@ -6,7 +6,12 @@ import { MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common'; // Import CommonModule for async pipe
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,7 +31,8 @@ const STAR_ICON = `
 @Component({
   selector: 'app-flat-view',
   standalone: true,
-  imports: [MatTableModule,
+  imports: [
+    MatTableModule,
     CommonModule,
     MatPaginator,
     MatPaginatorModule,
@@ -35,15 +41,16 @@ const STAR_ICON = `
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule,],
+    MatIconModule,
+  ],
   templateUrl: './flat-view.component.html',
-  styleUrl: './flat-view.component.css'
+  styleUrl: './flat-view.component.css',
 })
-export class FlatViewComponent implements OnInit{
-  flatId: string | null = null
+export class FlatViewComponent implements OnInit {
+  flatId: string | null = null;
   flat: Flat[] = [];
   flatMessages: Message[] = [];
-  flatOwner: string = ''
+  flatOwner: string = '';
   userFavoritesFlats: string[] = [];
   firestore = inject(FirestoreService);
   user: User | null = JSON.parse(localStorage.getItem('user')!);
@@ -65,16 +72,17 @@ export class FlatViewComponent implements OnInit{
     'messageContent',
     'userFullName',
     'date',
-    
   ];
 
   formMessage = new FormGroup({
     message: new FormControl('', Validators.required),
   });
 
-  constructor(private route: ActivatedRoute,
-    private firestoreService: FirestoreService ){
-      const iconRegistry = inject(MatIconRegistry);
+  constructor(
+    private route: ActivatedRoute,
+    private firestoreService: FirestoreService
+  ) {
+    const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
     iconRegistry.addSvgIconLiteral(
       'star_fill_icon',
@@ -90,17 +98,16 @@ export class FlatViewComponent implements OnInit{
     return this.formMessage.get('message');
   }
 
-  onSubmitMessage(){
+  onSubmitMessage() {
     const rawForm = this.formMessage.getRawValue();
-    if(rawForm.message){
+    if (rawForm.message) {
       const newMessage: Message = {
-        userId: this.user?.uid!,
+        userId: this.user?.id!,
         userEmail: this.user?.email!,
-        createdAt: new Date,
+        createdAt: new Date(),
         flatId: this.flatId!,
         userFullName: `${this.user?.firstName} ${this.user?.lastName}`,
-        content: rawForm.message
-        
+        content: rawForm.message,
       };
 
       this.firestoreService.createMessage(newMessage);
@@ -128,27 +135,29 @@ export class FlatViewComponent implements OnInit{
   ngOnInit(): void {
     const userFavorites = JSON.parse(localStorage.getItem('userFavorites')!);
     this.userFavoritesFlats = userFavorites;
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.flatId = params.get('id');
-      console.log(this.flatId )
+      console.log(this.flatId);
       if (this.flatId) {
-
-        this.firestoreService.getFlat(this.flatId).subscribe(flat => {
-          if(flat){
-            this.flatOwner = flat.userId
+        this.firestoreService.getFlat(this.flatId).subscribe((flat) => {
+          if (flat) {
+            this.flatOwner = flat.userId;
             this.flat = [flat];
-            if(this.user?.uid === flat.userId){
-              this.firestoreService.getFlatMessages(this.flatId!).subscribe(messages => {
-                this.flatMessages = messages
-              })
-            }else{
-              this.firestoreService.getFlatMessagesByUser(this.flatId!, this.user?.uid!).subscribe(messages => {
-                this.flatMessages = messages
-              })
+            if (this.user?.id === flat.userId) {
+              this.firestoreService
+                .getFlatMessages(this.flatId!)
+                .subscribe((messages) => {
+                  this.flatMessages = messages;
+                });
+            } else {
+              this.firestoreService
+                .getFlatMessagesByUser(this.flatId!, this.user?.id!)
+                .subscribe((messages) => {
+                  this.flatMessages = messages;
+                });
             }
           }
-          
-        })
+        });
       }
     });
   }
