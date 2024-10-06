@@ -161,9 +161,7 @@ export class RegisterComponent {
           rawForm.birthDate!,
 
         )
-        .subscribe(() => {
-          this.router.navigateByUrl('/');
-        });
+        
     } else {
       console.error('Form is invalid or missing values:', rawForm);
     }
