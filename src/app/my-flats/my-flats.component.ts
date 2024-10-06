@@ -84,7 +84,7 @@ export class MyFlatsComponent implements OnInit {
     const userFavorites = JSON.parse(localStorage.getItem('userFavorites')!);
     this.userFavoritesFlats = userFavorites;
 
-    const userId = this.userData.uid;
+    const userId = this.userData.id;
     this.firestore.getUserFlats(userId).subscribe((flats) => {
       if (flats) {
         this.flats$ = flats;
