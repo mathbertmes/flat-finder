@@ -5,6 +5,7 @@ import {
   collectionData,
   deleteDoc,
   doc,
+  docData,
   Firestore,
   getDoc,
   query,
@@ -31,16 +32,28 @@ export class FirestoreService {
     await addDoc(tasksCollection, flat);
   }
 
-  async createUser(userId: string, user: User): Promise<void> {
-    const userDocRef = doc(this.firestore, 'users', userId);
-    await setDoc(userDocRef, user);
+  async createUser(user: User): Promise<void> {
+    const userDocRef = collection(this.firestore, 'users');
+    await addDoc(userDocRef, user)
+
   }
 
-  getUser(id: string): Observable<User[]> {
-    const usersCollection = collection(this.firestore, 'users');
-    const userQuery = query(usersCollection, where('uid', '==', id));
-
+  loginFirestore(email: string, password: string): Observable<User[]>{
+    const userCollection = collection(this.firestore, 'users'); 
+    const userQuery = query(
+      userCollection,
+      where('email', '==', email),
+      where('password', '==', password)
+    )
+   
     return collectionData(userQuery, { idField: 'id' }) as Observable<User[]>;
+  }
+  
+
+  getUser(id: string): Observable<User | undefined>{
+    const userDocRef = doc(this.firestore, 'users', id);
+
+    return docData(userDocRef, { idField: 'id' }) as Observable<User | undefined>;
   }
 
   getAllUsers(): Observable<User[]> {
