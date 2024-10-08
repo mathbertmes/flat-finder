@@ -78,7 +78,8 @@ export class AuthService {
         role: 'user',
         favorites: [],
         deleted: false,
-        password
+        password,
+        flatsCounter: 0
       };
 
       this.firestoreFunctions.createUser(newUser).then(() => {
@@ -91,6 +92,7 @@ export class AuthService {
                 JSON.stringify(userData.favorites)
               )
               localStorage.setItem('userRole', userData.role)
+              localStorage.setItem('userFlatsCounter', JSON.stringify(userData.flatsCounter))
               localStorage.setItem('userFullName', `${userData.firstName} ${userData.lastName}`);
               localStorage.setItem('userEmail', userData.email);
               localStorage.setItem('userId', userData.id!);
@@ -116,6 +118,7 @@ export class AuthService {
             JSON.stringify(userData.favorites)
           )
           localStorage.setItem('userRole', userData.role)
+          localStorage.setItem('userFlatsCounter', JSON.stringify(userData.flatsCounter))
           localStorage.setItem('userFullName', `${userData.firstName} ${userData.lastName}`);
           localStorage.setItem('userEmail', userData.email);
           localStorage.setItem('userId', userData.id!);
