@@ -8,4 +8,5 @@ export interface User{
   role: string;
   favorites: string[];
   deleted: boolean;
+  flatsCounter: number;
 }
