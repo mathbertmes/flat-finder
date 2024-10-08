@@ -1,0 +1,93 @@
+<p>edit-flat works!</p>
+<div class="container">
+  <div class="formWrapper">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+          <div class="example-container">
+              <mat-form-field>
+                  <mat-label>Enter city</mat-label>
+                  <input matInput placeholder="City" formControlName="city" (blur)="updateCityErrorMessage()"
+                      required />
+                  @if (city?.invalid) {
+                  <mat-error>{{cityErrorMessage()}}</mat-error>
+                  }
+              </mat-form-field>
+          </div>
+
+          <div class="example-container">
+              <mat-form-field>
+                  <mat-label>Enter Street Number</mat-label>
+                  <input type="number" matInput placeholder="Street Number" formControlName="streetNumber"
+                      (blur)="updateStreetNumberErrorMessage()" required />
+                  @if (streetNumber?.invalid) {
+                  <mat-error>{{streetNumberErrorMessage()}}</mat-error>
+                  }
+              </mat-form-field>
+          </div>
+
+          <div class="example-container">
+              <mat-form-field>
+                  <mat-label>Enter Area Size</mat-label>
+                  <input matInput type="number" placeholder="Area Size" formControlName="areaSize"
+                      (blur)="updateAreaSizeErrorMessage()" required />
+                  @if (areaSize?.invalid) {
+                  <mat-error>{{areaSizeErrorMessage()}}</mat-error>
+                  }
+              </mat-form-field>
+          </div>
+
+          <div class="example-container">
+              <mat-form-field>
+                  <mat-label>Enter Has Ac</mat-label>
+                  <mat-select formControlName="hasAc" (blur)="updateHasAcErrorMessage()" required>
+                      <mat-option value="false">No</mat-option>
+                      <mat-option value="true">Yes</mat-option>
+                  </mat-select>
+                  @if (hasAc?.invalid) {
+                  <mat-error>{{hasAcErrorMessage()}}</mat-error>
+                  }
+              </mat-form-field>
+          </div>
+
+          <div class="example-container">
+              <mat-form-field>
+                  <mat-label>Enter Year Build</mat-label>
+                  <input type="number" matInput placeholder="Year Build" formControlName="yearBuild"
+                      (blur)="updateYearBuildErrorMessage()" required />
+                  @if (yearBuild?.invalid) {
+                  <mat-error>{{yearBuildErrorMessage()}}</mat-error>
+                  }
+              </mat-form-field>
+          </div>
+
+          <div class="example-container">
+              <mat-form-field>
+                  <mat-label>Enter Rent Price</mat-label>
+                  <input matInput type="number" placeholder="Rent Price" formControlName="rentPrice"
+                      (blur)="updateRentPriceErrorMessage()" required />
+                  @if (rentPrice?.invalid) {
+                  <mat-error>{{rentPriceErrorMessage()}}</mat-error>
+                  }
+              </mat-form-field>
+          </div>
+
+          <div class="example-container">
+            <mat-form-field>
+                <mat-label>Choose Data Available</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dataAvailable"
+                    (blur)="updateDataAvailableErrorMessage()" required>
+                @if (dataAvailable?.invalid) {
+                <mat-error>{{dataAvailableErrorMessage()}}</mat-error>
+                }
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+          
+
+          <button class="success" [disabled]="!form.valid" type="submit" mat-flat-button>Save</button>
+
+      </form>
+  </div>
+</div>
