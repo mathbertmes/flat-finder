@@ -153,11 +153,6 @@ export class NewFlatComponent {
   rentPriceErrorMessage = signal('');
   dataAvailableErrorMessage = signal('');
 
-  // constructor() {
-  //   merge(this.city!.statusChanges, this.city!.valueChanges)
-  //     .pipe(takeUntilDestroyed())
-  //     .subscribe(() => this.updateEmailErrorMessage());
-  // }
 
   updateCityErrorMessage() {
     if (this.city!.hasError('required')) {
