@@ -1,11 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators'; // Import the map operator
 import { FirestoreService } from '../firestore.service';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common'; // Import CommonModule for async pipe
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -38,11 +38,13 @@ import { Router } from '@angular/router';
 })
 export class AllUsersComponent implements OnInit {
   firestore = inject(FirestoreService);
+  @ViewChild(MatSort) sort: MatSort | null = null; 
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null; 
 
   constructor(private router: Router){}
 
-  // Ensure the observable won't emit null values, falling back to an empty array
-  users$: User[] = [];
+
+  users$: MatTableDataSource<User> = new MatTableDataSource<User>([]);
 
   displayedColumns: string[] = [
     'firstName',
@@ -95,7 +97,7 @@ export class AllUsersComponent implements OnInit {
 
         console.log(users);
 
-        this.users$ = users;
+        this.users$.data = users;
       } else {
         allUsers = [];
       }
@@ -129,11 +131,17 @@ export class AllUsersComponent implements OnInit {
     }
     this.firestore.getAllUsers().subscribe((users) => {
       if (users) {
-        this.users$ = users;
+        this.users$.data = users;
       } else {
-        this.users$ = [];
+        this.users$.data = [];
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    // Conectando sort e paginator ao MatTableDataSource
+    this.users$.sort = this.sort;
+    this.users$.paginator = this.paginator;
   }
 
   storedData: any = localStorage.getItem('user');

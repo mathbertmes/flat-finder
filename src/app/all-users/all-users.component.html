@@ -61,12 +61,12 @@
   <!-- Street Number Column -->
   <ng-container matColumnDef="birthDate">
     <th mat-header-cell *matHeaderCellDef>Birth Date</th>
-    <td mat-cell *matCellDef="let element">{{ element.birthDate }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.birthDate?.seconds * 1000 | date: 'dd/MM/yyyy' }}</td>
   </ng-container>
 
   <ng-container matColumnDef="flatsCounter">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Flats Counter</th>
-    <td mat-cell *matCellDef="let element">0</td>
+    <td mat-cell *matCellDef="let element">{{element.flatsCounter}}</td>
   </ng-container>
 
   <ng-container matColumnDef="IsAdmin">
