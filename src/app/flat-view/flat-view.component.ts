@@ -71,6 +71,7 @@ export class FlatViewComponent implements OnInit {
   displayedColumnsMessage: string[] = [
     'messageContent',
     'userFullName',
+    'email',
     'date',
   ];
 
