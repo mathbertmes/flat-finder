@@ -276,6 +276,26 @@ export class ProfileUpdateComponent {
 
   onSubmit(): void {
     console.log('onSubmit')
-    
+    const rawForm: any = this.form.getRawValue();
+
+    if (
+      (rawForm.email && rawForm.password && rawForm.firstName,
+
+      rawForm.lastName &&
+        rawForm.birthDate)
+    ) {
+
+      const newUser = {
+          email : rawForm.email!,
+          password: rawForm.password!,
+          firstName: rawForm.firstName!,
+          lastName: rawForm.lastName!,
+          birthDate: rawForm.birthDate!,
+      }
+      this.firestore.updateUser(this.userId!, newUser)
+        
+    } else {
+      console.error('Form is invalid or missing values:', rawForm);
+    }
   }
 }
