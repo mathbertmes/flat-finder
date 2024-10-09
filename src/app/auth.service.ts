@@ -96,7 +96,7 @@ export class AuthService {
               localStorage.setItem('userFullName', `${userData.firstName} ${userData.lastName}`);
               localStorage.setItem('userEmail', userData.email);
               localStorage.setItem('userId', userData.id!);
-              this.router.navigateByUrl("/home")
+              this.router.navigateByUrl("/")
           }else{
             console.log("user not found")
           }
@@ -110,7 +110,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     const user = this.firestoreFunctions.loginFirestore(email, password).subscribe((users: User[]) => {
-      if(users){
+      if(users.length > 0){
         const userData = users[0]
         localStorage.setItem('user', JSON.stringify(userData));
             localStorage.setItem(
