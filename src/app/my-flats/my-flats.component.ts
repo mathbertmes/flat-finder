@@ -77,6 +77,14 @@ export class MyFlatsComponent implements OnInit {
     this.router.navigate(['/flat-view', flatId]);
   }
 
+  openFlatEditPage(flatId: string){
+    this.router.navigate(['/edit-flat', flatId]);
+  }
+
+  handleDeleteFlat(flatId: string){
+    this.firestore.deleteFlatData(flatId)
+  }
+
   storedData: any = localStorage.getItem('user');
   userData = JSON.parse(this.storedData);
 
@@ -84,7 +92,7 @@ export class MyFlatsComponent implements OnInit {
     const userFavorites = JSON.parse(localStorage.getItem('userFavorites')!);
     this.userFavoritesFlats = userFavorites;
 
-    const userId = this.userData.uid;
+    const userId = this.userData.id;
     this.firestore.getUserFlats(userId).subscribe((flats) => {
       if (flats) {
         this.flats$ = flats;

@@ -1,12 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators'; // Import the map operator
 import { Flat } from '../interfaces/flat.interface';
 import { FirestoreService } from '../firestore.service';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common'; // Import CommonModule for async pipe
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { Sort, MatSortModule } from '@angular/material/sort';
+import { Sort, MatSortModule, MatSort } from '@angular/material/sort';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +15,7 @@ import { User } from '../interfaces/user.interface';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 const STAR_FILL_ICON = `
   <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="m243-144 63-266L96-589l276-24 108-251 108 252 276 23-210 179 63 266-237-141-237 141Z"/></svg>
@@ -43,27 +44,12 @@ const STAR_ICON = `
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  @ViewChild(MatSort) sort: MatSort | null = null; 
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null; 
+  
   firestore = inject(FirestoreService);
-
-  constructor(private router: Router) {
-    const iconRegistry = inject(MatIconRegistry);
-    const sanitizer = inject(DomSanitizer);
-
-    // Note that we provide the icon here as a string literal here due to a limitation in
-    // Stackblitz. If you want to provide the icon from a URL, you can use:
-    // `iconRegistry.addSvgIcon('thumbs-up', sanitizer.bypassSecurityTrustResourceUrl('icon.svg'));`
-    iconRegistry.addSvgIconLiteral(
-      'star_fill_icon',
-      sanitizer.bypassSecurityTrustHtml(STAR_FILL_ICON)
-    );
-    iconRegistry.addSvgIconLiteral(
-      'star_icon',
-      sanitizer.bypassSecurityTrustHtml(STAR_ICON)
-    );
-  }
-
-  // Ensure the observable won't emit null values, falling back to an empty array
-  flats$: Flat[] = [];
+  
+  flats$: MatTableDataSource<Flat> = new MatTableDataSource<Flat>([]); // Mudando para MatTableDataSource para usar o sort e o paginator
 
   userFavoritesFlats: string[] = [];
   userMessages: any;
@@ -83,7 +69,6 @@ export class HomeComponent implements OnInit {
     'dataAvailable',
     'favorite',
     'flat-view'
-
   ];
 
   formFilter = new FormGroup({
@@ -94,15 +79,42 @@ export class HomeComponent implements OnInit {
     maxArea: new FormControl(0),
   });
 
-  openFlatViewPage(flatId: string){
+  constructor(private router: Router) {
+    const iconRegistry = inject(MatIconRegistry);
+    const sanitizer = inject(DomSanitizer);
+
+    iconRegistry.addSvgIconLiteral(
+      'star_fill_icon',
+      sanitizer.bypassSecurityTrustHtml(STAR_FILL_ICON)
+    );
+    iconRegistry.addSvgIconLiteral(
+      'star_icon',
+      sanitizer.bypassSecurityTrustHtml(STAR_ICON)
+    );
+  }
+
+  ngOnInit(): void {
+    const userFavorites = JSON.parse(localStorage.getItem('userFavorites')!);
+    this.userFavoritesFlats = userFavorites || [];
+
+
+    this.firestore.getFlats().subscribe((flats) => {
+      this.flats$.data = flats || []
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.flats$.sort = this.sort;
+    this.flats$.paginator = this.paginator;
+  }
+
+  openFlatViewPage(flatId: string) {
     this.router.navigate(['/flat-view', flatId]);
   }
 
   onFilter() {
-    let allFlats: Flat[] = [];
     this.firestore.getFlats().subscribe((flats) => {
       if (flats) {
-        console.log(flats);
         const rawForm = this.formFilter.getRawValue();
 
         if (rawForm.city) {
@@ -123,11 +135,8 @@ export class HomeComponent implements OnInit {
           flats = flats.filter((flat) => flat.areaSize <= rawForm.maxArea!);
         }
 
-        console.log(flats);
-
-        this.flats$ = flats;
-      } else {
-        allFlats = [];
+        // Atualizar os dados filtrados no MatTableDataSource
+        this.flats$.data = flats;
       }
     });
   }
@@ -135,11 +144,13 @@ export class HomeComponent implements OnInit {
   handleFavorite(id: string): void {
     const favoritesList = this.userFavoritesFlats;
     const userId = localStorage.getItem('userId')!;
+
     if (favoritesList.includes(id)) {
       favoritesList.splice(favoritesList.indexOf(id), 1);
     } else {
       favoritesList.push(id);
     }
+
     this.userFavoritesFlats = favoritesList;
     localStorage.setItem('userFavorites', JSON.stringify(favoritesList));
 
@@ -148,18 +159,5 @@ export class HomeComponent implements OnInit {
     };
 
     this.firestore.updateUser(userId, updatedUser);
-  }
-
-  ngOnInit(): void {
-    const userFavorites = JSON.parse(localStorage.getItem('userFavorites')!);
-    this.userFavoritesFlats = userFavorites;
-    console.log(this.userFavoritesFlats);
-    this.firestore.getFlats().subscribe((flats) => {
-      if (flats) {
-        this.flats$ = flats;
-      } else {
-        this.flats$ = [];
-      }
-    });
   }
 }

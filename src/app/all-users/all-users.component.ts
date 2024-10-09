@@ -1,11 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators'; // Import the map operator
 import { FirestoreService } from '../firestore.service';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CommonModule } from '@angular/common'; // Import CommonModule for async pipe
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -38,11 +38,13 @@ import { Router } from '@angular/router';
 })
 export class AllUsersComponent implements OnInit {
   firestore = inject(FirestoreService);
+  @ViewChild(MatSort) sort: MatSort | null = null; 
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null; 
 
   constructor(private router: Router){}
 
-  // Ensure the observable won't emit null values, falling back to an empty array
-  users$: User[] = [];
+
+  users$: MatTableDataSource<User> = new MatTableDataSource<User>([]);
 
   displayedColumns: string[] = [
     'firstName',
@@ -64,44 +66,62 @@ export class AllUsersComponent implements OnInit {
   });
 
   onFilter() {
-    let allUsers: User[] = [];
     this.firestore.getAllUsers().subscribe((users) => {
       if (users) {
-        console.log(users);
         const rawForm = this.formFilter.getRawValue();
-
+        const currentDate = new Date();
+  
+        // Filtro por nome
         if (rawForm.firstName) {
           users = users.filter((user) =>
-            user.firstName
-              .toUpperCase()
-              .includes(rawForm.firstName!.toUpperCase())
+            user.firstName.toUpperCase().includes(rawForm.firstName!.toUpperCase())
           );
         }
+  
+        // Filtro por idade mínima
         if (rawForm.minAge !== 0) {
-          users = users.filter((user) => 1 >= rawForm.minAge!);
+          users = users.filter((user) => {
+            const birthDate = new Date(user.birthDate);
+            const age = currentDate.getFullYear() - birthDate.getFullYear();
+            const isOldEnough = currentDate.getMonth() > birthDate.getMonth() || 
+              (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() >= birthDate.getDate());
+            
+            return (isOldEnough ? age : age - 1) >= rawForm.minAge!;
+          });
         }
+  
+        // Filtro por idade máxima
         if (rawForm.maxAge !== 0) {
-          users = users.filter((user) => 1 <= rawForm.maxAge!);
+          users = users.filter((user) => {
+            const birthDate = new Date(user.birthDate);
+            const age = currentDate.getFullYear() - birthDate.getFullYear();
+            const isOldEnough = currentDate.getMonth() > birthDate.getMonth() || 
+              (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() >= birthDate.getDate());
+            
+            return (isOldEnough ? age : age - 1) <= rawForm.maxAge!;
+          });
         }
+  
+        // Filtro por flatsCounter mínimo
         if (rawForm.minFlatsCounter !== 0) {
-          users = users.filter((user) => 1 >= rawForm.minFlatsCounter!);
+          users = users.filter((user) => user.flatsCounter >= rawForm.minFlatsCounter!);
         }
+  
+        // Filtro por flatsCounter máximo
         if (rawForm.maxFlatsCounter !== 0) {
-          users = users.filter((user) => 1 <= rawForm.maxFlatsCounter!);
+          users = users.filter((user) => user.flatsCounter <= rawForm.maxFlatsCounter!);
         }
-        if (rawForm.IsAdmin !== 0) {
-          users = users.filter((user) => 1 <= rawForm.IsAdmin!);
-        }
-
+  
+        // Atualiza a tabela com os usuários filtrados
+        this.users$.data = users;
         console.log(users);
-
-        this.users$ = users;
+  
       } else {
-        allUsers = [];
+        this.users$.data = [];
       }
     });
   }
-
+  
   handleUserRoleChange(userId: string, role: string){
     const updatedUser = {
       role: role === 'admin' ? 'user' : 'admin',
@@ -129,11 +149,17 @@ export class AllUsersComponent implements OnInit {
     }
     this.firestore.getAllUsers().subscribe((users) => {
       if (users) {
-        this.users$ = users;
+        this.users$.data = users;
       } else {
-        this.users$ = [];
+        this.users$.data = [];
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    // Conectando sort e paginator ao MatTableDataSource
+    this.users$.sort = this.sort;
+    this.users$.paginator = this.paginator;
   }
 
   storedData: any = localStorage.getItem('user');

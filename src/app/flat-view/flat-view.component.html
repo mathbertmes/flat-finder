@@ -77,16 +77,21 @@
 </table>
 
 
-<div>
-  <form [formGroup]="formMessage" (ngSubmit)="onSubmitMessage()" class="flex gap-2">
-    <mat-form-field class="example-full-width">
-      <mat-label>Message</mat-label>
-      <input matInput placeholder="Message" formControlName="message">
-    </mat-form-field>
-    <button class="success" [disabled]="!formMessage.valid" type="submit" mat-flat-button>Send</button>
-  </form>
-</div>
 
+
+<div class="mt-10">
+  <div>
+    <h1 class="text-3xl mb-5 font-semibold">Messages</h1>
+    <div>
+      <form [formGroup]="formMessage" *ngIf="user?.id != flatOwner" (ngSubmit)="onSubmitMessage()" class="flex gap-2">
+        <mat-form-field class="example-full-width">
+          <mat-label>Message</mat-label>
+          <input matInput placeholder="Message" formControlName="message">
+        </mat-form-field>
+        <button class="success" [disabled]="!formMessage.valid" type="submit" mat-flat-button>Send</button>
+      </form>
+    </div>
+  </div>
 <table matSort  mat-table [dataSource]="flatMessages" >
 
   <!-- City Column -->
@@ -99,6 +104,11 @@
   <ng-container matColumnDef="userFullName">
     <th mat-header-cell *matHeaderCellDef> Name </th>
     <td mat-cell *matCellDef="let element"> {{element.userFullName}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <td mat-cell *matCellDef="let element"> {{element.userEmail}} </td>
   </ng-container>
 
   <!-- Owner Email Column -->
@@ -116,3 +126,4 @@
   
 
 </table>
+</div>

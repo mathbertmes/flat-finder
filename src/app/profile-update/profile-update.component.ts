@@ -16,9 +16,9 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,8 +27,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { merge } from 'rxjs';
+import { BehaviorSubject, merge } from 'rxjs';
 import { User } from '../interfaces/user.interface';
+import { FirestoreService } from '../firestore.service';
 
 @Component({
   selector: 'app-profile-update',
@@ -43,42 +44,62 @@ import { User } from '../interfaces/user.interface';
     FormsModule,
     ReactiveFormsModule,
     NgIf,
+    CommonModule
   ],
   providers: [provideNativeDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './profile-update.component.html',
   styleUrl: './profile-update.component.css',
 })
-export class ProfileUpdateComponent implements OnInit {
-  http = inject(HttpClient);
-  router = inject(Router);
-  authService = inject(AuthService);
+export class ProfileUpdateComponent {
+  userId: string | null = null;
+  user = new BehaviorSubject<User | undefined>(undefined);
+  user$ = this.user.asObservable();
+  firestore = inject(FirestoreService);
 
-  userdata = [];
+  constructor(private route: ActivatedRoute) {}
 
-  storedData: any = localStorage.getItem('user')!;
-  userData = JSON.parse(this.storedData);
+  ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      this.userId = params.get('id');
+      console.log('User ID:', this.userId);
 
-  ngOnInit(): void {
-    let user = JSON.parse(localStorage.getItem('user')!);
-    this.userdata = user[0];
+      if (this.userId) {
+        // Usa o `id` para buscar os dados do usuário
+        this.firestore.getUser(this.userId).subscribe({
+          next: (user) => {
+      
+            if (user) {
+              this.user.next(user)
+              this.initializeForm(user);
+              console.log('User data loaded:', this.user$);
+            } else {
+              console.log('No user data found.');
+            }
+
+          },
+          error: (err) => {
+            console.error('Error fetching user data:', err);
+          }
+        });
+      } else {
+        console.log('No user ID provided.');
+      }
+    });
   }
 
   form = new FormGroup(
     {
-      firstName: new FormControl(this.userData.firstName, [
+      firstName: new FormControl("", [
         Validators.required,
         Validators.minLength(2),
       ]),
-      lastName: new FormControl(this.userData.lastName, [
+      lastName: new FormControl('', [
         Validators.required,
         Validators.minLength(2),
       ]),
-      email: new FormControl(this.userData.email, [
-        Validators.required,
-        Validators.email,
-      ]),
-      birthDate: new FormControl(this.userData.birthDate, [
+      email: new FormControl('', [Validators.required, Validators.email]),
+      birthDate: new FormControl(new Date, [
         Validators.required,
         this.ageRangeValidator(18, 120),
       ]),
@@ -88,9 +109,21 @@ export class ProfileUpdateComponent implements OnInit {
         Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
+      role: new FormControl(''),
+      favorites: new FormControl(''),
     },
     [this.matching('password', 'confirmPassword')]
   );
+
+  initializeForm(user: User): void {
+    this.form.patchValue({ // Preenche o formulário com os dados do usuário
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      birthDate: user.birthDate || new Date,
+      role: user.role,
+    });
+  }
 
   checkSpecialCharacter = () => {};
 
@@ -157,43 +190,12 @@ export class ProfileUpdateComponent implements OnInit {
     };
   }
 
-  onSubmit(): void {
-    const rawForm = this.form.getRawValue();
-
-    if (
-      rawForm.email &&
-      rawForm.firstName &&
-      rawForm.lastName &&
-      rawForm.birthDate
-    ) {
-      this.authService
-        .updateProfile(
-          rawForm.email!,
-          rawForm.firstName!,
-          rawForm.lastName!,
-          rawForm.birthDate!
-        )
-        .subscribe(() => {
-          window.location.reload();
-          this.router.navigateByUrl('/profile');
-        });
-    } else {
-      console.error('Form is invalid or missing values:', rawForm);
-    }
-  }
-
   firstNameErrorMessage = signal('');
   lastNameErrorMessage = signal('');
   emailErrorMessage = signal('');
   birthDateErrorMessage = signal('');
   passwordErrorMessage = signal('');
   confirmPasswordErrorMessage = signal('');
-
-  constructor() {
-    merge(this.email!.statusChanges, this.email!.valueChanges)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.updateEmailErrorMessage());
-  }
 
   updateFirstNameErrorMessage() {
     if (this.firstName!.hasError('required')) {
@@ -270,5 +272,30 @@ export class ProfileUpdateComponent implements OnInit {
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
+  }
+
+  onSubmit(): void {
+    console.log('onSubmit')
+    const rawForm: any = this.form.getRawValue();
+
+    if (
+      (rawForm.email && rawForm.password && rawForm.firstName,
+
+      rawForm.lastName &&
+        rawForm.birthDate)
+    ) {
+
+      const newUser = {
+          email : rawForm.email!,
+          password: rawForm.password!,
+          firstName: rawForm.firstName!,
+          lastName: rawForm.lastName!,
+          birthDate: rawForm.birthDate!,
+      }
+      this.firestore.updateUser(this.userId!, newUser)
+        
+    } else {
+      console.error('Form is invalid or missing values:', rawForm);
+    }
   }
 }

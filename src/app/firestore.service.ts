@@ -5,6 +5,7 @@ import {
   collectionData,
   deleteDoc,
   doc,
+  docData,
   Firestore,
   getDoc,
   query,
@@ -25,22 +26,44 @@ import { Message } from './interfaces/message.interface';
 export class FirestoreService {
   firestore = inject(Firestore);
 
-  //CREATE
+
   async createFlat(flat: Flat): Promise<void> {
     const tasksCollection = collection(this.firestore, 'flats');
     await addDoc(tasksCollection, flat);
+
+    const userFlatsCounter = parseInt(localStorage.getItem("userFlatsCounter")!) + 1
+
+    localStorage.setItem("userFlatsCounter", JSON.stringify(userFlatsCounter))
+
+    const updatedUser = {
+      flatsCounter : userFlatsCounter
+    }
+
+    this.updateUser(localStorage.getItem("userId")!, updatedUser)
   }
 
-  async createUser(userId: string, user: User): Promise<void> {
-    const userDocRef = doc(this.firestore, 'users', userId);
-    await setDoc(userDocRef, user);
+  async createUser(user: User): Promise<void> {
+    const userDocRef = collection(this.firestore, 'users');
+    await addDoc(userDocRef, user)
+
   }
 
-  getUser(id: string): Observable<User[]> {
-    const usersCollection = collection(this.firestore, 'users');
-    const userQuery = query(usersCollection, where('uid', '==', id));
-
+  loginFirestore(email: string, password: string): Observable<User[]>{
+    const userCollection = collection(this.firestore, 'users'); 
+    const userQuery = query(
+      userCollection,
+      where('email', '==', email),
+      where('password', '==', password)
+    )
+   
     return collectionData(userQuery, { idField: 'id' }) as Observable<User[]>;
+  }
+  
+
+  getUser(id: string): Observable<User | undefined>{
+    const userDocRef = doc(this.firestore, 'users', id);
+
+    return docData(userDocRef, { idField: 'id' }) as Observable<User | undefined>;
   }
 
   getAllUsers(): Observable<User[]> {
@@ -89,11 +112,32 @@ export class FirestoreService {
     await updateDoc(userDocRef, updatedData);
   }
 
+  async updateFlat(flatId: string, updatedData: Partial<Flat>): Promise<void> {
+    const userDocRef = doc(this.firestore, 'flats', flatId);
+    await updateDoc(userDocRef, updatedData);
+  }
+
 
   
 
   deleteUserData(userId: string): Promise<void> {
     const userDocRef = doc(this.firestore, 'users', userId);
+    return deleteDoc(userDocRef);
+  }
+
+  deleteFlatData(flatId: string): Promise<void> {
+
+    const userFlatsCounter = parseInt(localStorage.getItem("userFlatsCounter")!) - 1
+
+    localStorage.setItem("userFlatsCounter", JSON.stringify(userFlatsCounter))
+
+    const updatedUser = {
+      flatsCounter : userFlatsCounter
+    }
+
+    this.updateUser(localStorage.getItem("userId")!, updatedUser)
+
+    const userDocRef = doc(this.firestore, 'flats', flatId);
     return deleteDoc(userDocRef);
   }
 

@@ -2,8 +2,8 @@
 <div>
   <form [formGroup]="formFilter" (ngSubmit)="onFilter()" class="flex gap-2">
     <mat-form-field class="example-full-width">
-      <mat-label>User Type</mat-label>
-      <input matInput placeholder="City" formControlName="firstName" />
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" formControlName="firstName" />
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Min age</mat-label>
@@ -61,12 +61,12 @@
   <!-- Street Number Column -->
   <ng-container matColumnDef="birthDate">
     <th mat-header-cell *matHeaderCellDef>Birth Date</th>
-    <td mat-cell *matCellDef="let element">{{ element.birthDate }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.birthDate?.seconds * 1000 | date: 'dd/MM/yyyy' }}</td>
   </ng-container>
 
   <ng-container matColumnDef="flatsCounter">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Flats Counter</th>
-    <td mat-cell *matCellDef="let element">0</td>
+    <td mat-cell *matCellDef="let element">{{element.flatsCounter}}</td>
   </ng-container>
 
   <ng-container matColumnDef="IsAdmin">
@@ -90,21 +90,21 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="goToProfile(element.uid)">
+        <button mat-menu-item (click)="goToProfile(element.id)">
           <span>Open user profile</span>
         </button>
         
         <!-- Verificação da role para mostrar Olá ou Oi -->
         <button mat-menu-item>
           <ng-container  *ngIf="element.role === 'admin'; else isNotAdmin">
-            <button (click)="handleUserRoleChange(element.uid, element.role)">Remove admin role</button>
+            <button (click)="handleUserRoleChange(element.id, element.role)">Remove admin role</button>
           </ng-container>
           <ng-template #isNotAdmin>
-            <button (click)="handleUserRoleChange(element.uid, element.role)">Give admin role</button>
+            <button (click)="handleUserRoleChange(element.id, element.role)">Give admin role</button>
           </ng-template>
         </button>
         
-        <button mat-menu-item (click)="handleRemoveUser(element.uid)">
+        <button mat-menu-item (click)="handleRemoveUser(element.id)">
           <span class="text-red">Remove user</span>
         </button>
       </mat-menu>

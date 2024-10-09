@@ -9,10 +9,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { ProfileUpdateComponent } from '../profile-update/profile-update.component';
 import { log } from 'console';
 import { User } from '../interfaces/user.interface';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -25,7 +24,6 @@ import { ActivatedRoute } from '@angular/router';
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-    ProfileUpdateComponent,
   ], // Add CommonModule
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -52,7 +50,7 @@ export class ProfileComponent implements OnInit {
 
 
 
-  constructor(private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute, private router: Router,
     private firestoreService: FirestoreService ){
 
   }
@@ -65,7 +63,10 @@ export class ProfileComponent implements OnInit {
         // Usa o `id` para buscar os dados do usuário
         this.firestoreService.getUser(this.userId).subscribe(user => {
           console.log(user)
-          this.users$ = user;
+          if(user){
+            this.users$ = [user];
+          }
+          
         })
       }
     });
@@ -78,9 +79,8 @@ export class ProfileComponent implements OnInit {
     // });
   }
 
-  showComponent = false;
-
-  toggleComponent() {
-    this.showComponent = !this.showComponent;
+  handleEditProfile(){
+    this.router.navigate(['/profile-update', this.userId]);
   }
+
 }
