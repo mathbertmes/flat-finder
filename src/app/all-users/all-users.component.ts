@@ -66,44 +66,62 @@ export class AllUsersComponent implements OnInit {
   });
 
   onFilter() {
-    let allUsers: User[] = [];
     this.firestore.getAllUsers().subscribe((users) => {
       if (users) {
-        console.log(users);
         const rawForm = this.formFilter.getRawValue();
-
+        const currentDate = new Date();
+  
+        // Filtro por nome
         if (rawForm.firstName) {
           users = users.filter((user) =>
-            user.firstName
-              .toUpperCase()
-              .includes(rawForm.firstName!.toUpperCase())
+            user.firstName.toUpperCase().includes(rawForm.firstName!.toUpperCase())
           );
         }
+  
+        // Filtro por idade mínima
         if (rawForm.minAge !== 0) {
-          users = users.filter((user) => 1 >= rawForm.minAge!);
+          users = users.filter((user) => {
+            const birthDate = new Date(user.birthDate);
+            const age = currentDate.getFullYear() - birthDate.getFullYear();
+            const isOldEnough = currentDate.getMonth() > birthDate.getMonth() || 
+              (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() >= birthDate.getDate());
+            
+            return (isOldEnough ? age : age - 1) >= rawForm.minAge!;
+          });
         }
+  
+        // Filtro por idade máxima
         if (rawForm.maxAge !== 0) {
-          users = users.filter((user) => 1 <= rawForm.maxAge!);
+          users = users.filter((user) => {
+            const birthDate = new Date(user.birthDate);
+            const age = currentDate.getFullYear() - birthDate.getFullYear();
+            const isOldEnough = currentDate.getMonth() > birthDate.getMonth() || 
+              (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() >= birthDate.getDate());
+            
+            return (isOldEnough ? age : age - 1) <= rawForm.maxAge!;
+          });
         }
+  
+        // Filtro por flatsCounter mínimo
         if (rawForm.minFlatsCounter !== 0) {
-          users = users.filter((user) => 1 >= rawForm.minFlatsCounter!);
+          users = users.filter((user) => user.flatsCounter >= rawForm.minFlatsCounter!);
         }
+  
+        // Filtro por flatsCounter máximo
         if (rawForm.maxFlatsCounter !== 0) {
-          users = users.filter((user) => 1 <= rawForm.maxFlatsCounter!);
+          users = users.filter((user) => user.flatsCounter <= rawForm.maxFlatsCounter!);
         }
-        if (rawForm.IsAdmin !== 0) {
-          users = users.filter((user) => 1 <= rawForm.IsAdmin!);
-        }
-
-        console.log(users);
-
+  
+        // Atualiza a tabela com os usuários filtrados
         this.users$.data = users;
+        console.log(users);
+  
       } else {
-        allUsers = [];
+        this.users$.data = [];
       }
     });
   }
-
+  
   handleUserRoleChange(userId: string, role: string){
     const updatedUser = {
       role: role === 'admin' ? 'user' : 'admin',
